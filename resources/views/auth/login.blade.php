@@ -14,9 +14,23 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/app-modern.min.css" rel="stylesheet" type="text/css" id="app-style" />
 
+    <style>
+        body.authentication-bg {
+            background-image: url("../images/cover-login.jpg");
+        }
+
+        .form-check-input:checked {
+            background-color: #181f28eb;
+            border-color: #181f28eb;
+        }
+    </style>
+
+
 </head>
 
 <body class="loading authentication-bg" data-layout-config='{"darkMode":false}'>
+
+  
     <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
         <div class="container">
             <div class="row justify-content-center">
@@ -24,7 +38,7 @@
                     <div class="card">
 
                         <!-- Logo -->
-                        <div class="card-header pt-4 pb-4 text-center bg-primary">
+                        <div class="card-header pt-4 pb-4 text-center " style="background-color: #23b8f1;">
                             <a href="#" style="color: #fff; font-size:25px; font-weight: bold;">
                                 {{-- <span><img src="assets/images/logo.png" alt="" height="18"></span> --}}
                                 {{ env('APP_NAME') }}
@@ -71,13 +85,13 @@
                                 </div>
 
                                 <div class="mb-3 text-center">
-                                    <button class="btn btn-primary" type="submit"> Se connecter </button>
+                                    <button class="btn btn-primary" style="background-color: #181f28eb;border-color: #181f28eb;"  type="submit"> Se connecter </button>
                                 </div>
 
-                                <div class="mb-3 mt-15 text-center">
+                                {{-- <div class="mb-3 mt-15 text-center">
                                     <a href="{{ route('logino365') }}" class="btn btn-danger" type="submit"> Se
                                         connecter avec Office 365</a>
-                                </div>
+                                </div> --}}
                             </form>
 
                             @if (session('error'))
