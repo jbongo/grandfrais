@@ -12,6 +12,7 @@ class AddForm extends Component
     public $contact_existant;
     public $individus;
     public $individu;
+    public $individu_id;
     public $nom;   
     public $prenom;    
     public $email;
@@ -19,7 +20,7 @@ class AddForm extends Component
     public $nom_voie;
     public $complement_voie;
     public $code_postal;
-    public $ville;
+    public $ville = "Abidjan";
     public $pays;
     public $code_insee;
     public $code_cedex;
@@ -38,6 +39,7 @@ class AddForm extends Component
     public $notes;
     public $role;
     public $contactindividus;
+    
     
     
     public function render()

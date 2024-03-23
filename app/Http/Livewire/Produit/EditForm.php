@@ -37,6 +37,7 @@ class EditForm extends Component
     public $seuil_alerte_stock;
     public $produit;
     public $caracteristiques;
+    public $unite_mesure;
         
         
     public function mount(){

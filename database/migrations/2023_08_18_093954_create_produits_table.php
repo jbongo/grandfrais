@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer("marque_id")->nullable();
             $table->integer("user_id")->nullable();
             $table->integer("tva_id")->nullable();
+            $table->string("unite_mesure")->nullable();
             // Simple, déclinaison
             $table->string("type")->nullable();
             // Matériel, Prestation de service

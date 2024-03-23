@@ -24,6 +24,11 @@ use App\Http\Controllers\ContratController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PrestationController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\AchatController;
+use App\Http\Controllers\VenteController;
+use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\TypedepenseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,6 +107,20 @@ Route::controller(CaracteristiqueController::class)->group(function () {
     Route::post('/caracteristique-valeur/modifier/{valeur_caracteristiqueId}', 'update_valeur')->name('caracteristique_valeur.update')->middleware(['auth']);
     Route::post('/caracteristique-valeur/archiver/{valeur_caracteristiqueId}', 'archive_valeur')->name('caracteristique_valeur.archive')->middleware(['auth']);
     Route::post('/caracteristique-valeur/desarchiver/{valeur_caracteristiqueId}', 'unarchive_valeur')->name('caracteristique_valeur.unarchive')->middleware(['auth']);
+});
+
+// Typedepense
+Route::controller(TypedepenseController::class)->group(function () {
+    Route::get('/typedepenses', 'index')->name('typedepense.index')->middleware(['auth']);
+    Route::get('/typedepenses/archives', 'archives')->name('typedepense.archives')->middleware(['auth']);
+    Route::get('/typedepenses/detail/{typedepenseId}', 'show')->name('typedepense.show')->middleware(['auth']);
+    Route::get('/typedepenses/modifier/{typedepenseId}', 'edit')->name('typedepense.edit')->middleware(['auth']);
+    Route::post('/typedepenses/ajouter', 'store')->name('typedepense.store')->middleware(['auth']);
+    Route::post('/typedepenses/modifier/{typedepenseId}', 'update')->name('typedepense.update')->middleware(['auth']);
+    Route::post('/typedepenses/archiver/{typedepenseId}', 'archive')->name('typedepense.archive')->middleware(['auth']);
+    Route::post('/typedepenses/desarchiver/{typedepenseId}', 'unarchive')->name('typedepense.unarchive')->middleware(['auth']);
+    
+  
 });
 
 // Categorieproduit
@@ -277,7 +296,56 @@ Route::controller(ProduitController::class)->group(function () {
     
 });
 
+// Stock
 
+Route::controller(StockController::class)->group(function () {
+    Route::get('/stocks', 'index')->name('stock.index')->middleware(['auth']);
+    Route::get('/stocks/archives', 'archives')->name('stock.archives')->middleware(['auth']);
+    Route::post('/stocks/ajouter', 'store')->name('stock.store')->middleware(['auth']);
+    Route::get('/stocks/ajouter', 'create')->name('stock.create')->middleware(['auth']);
+    Route::get('/stocks/show/{stockId}', 'show')->name('stock.show')->middleware(['auth']);
+    Route::get('/stocks/modifier/{stockId}', 'edit')->name('stock.edit')->middleware(['auth']);
+    Route::post('/stocks/modifier/{stockId}', 'update')->name('stock.update')->middleware(['auth']);
+    Route::put('/stocks/archiver/{stockId}', 'archive')->name('stock.archive')->middleware(['auth']);
+    Route::post('/stocks/desarchiver/{stockId}', 'unarchive')->name('stock.unarchive')->middleware(['auth']);
+});
+
+// Achats
+Route::controller(AchatController::class)->group(function () {
+    Route::get('/achats', 'index')->name('achat.index')->middleware(['auth']);
+    Route::get('/achats/archives', 'archives')->name('achat.archives')->middleware(['auth']);
+    Route::post('/achats/ajouter', 'store')->name('achat.store')->middleware(['auth']);
+    Route::get('/achats/ajouter', 'create')->name('achat.create')->middleware(['auth']);
+    Route::get('/achats/show/{achatId}', 'show')->name('achat.show')->middleware(['auth']);
+    Route::get('/achats/modifier/{achatId}', 'edit')->name('achat.edit')->middleware(['auth']);
+    Route::post('/achats/modifier/{achatId}', 'update')->name('achat.update')->middleware(['auth']);
+    Route::put('/achats/archiver/{achatId}', 'archive')->name('achat.archive')->middleware(['auth']);
+    Route::post('/achats/desarchiver/{achatId}', 'unarchive')->name('achat.unarchive')->middleware(['auth']);
+});
+
+// Ventes
+Route::controller(VenteController::class)->group(function () {
+    Route::get('/ventes', 'index')->name('vente.index')->middleware(['auth']);
+    Route::get('/ventes/archives', 'archives')->name('vente.archives')->middleware(['auth']);
+    Route::post('/ventes/ajouter', 'store')->name('vente.store')->middleware(['auth']);
+    Route::get('/ventes/ajouter', 'create')->name('vente.create')->middleware(['auth']);
+    Route::get('/ventes/show/{venteId}', 'show')->name('vente.show')->middleware(['auth']);
+    Route::get('/ventes/modifier/{venteId}', 'edit')->name('vente.edit')->middleware(['auth']);
+    Route::post('/ventes/modifier/{venteId}', 'update')->name('vente.update')->middleware(['auth']);
+    Route::post('/ventes/archiver/{venteId}', 'archive')->name('vente.archive')->middleware(['auth']);
+    Route::post('/ventes/desarchiver/{venteId}', 'unarchive')->name('vente.unarchive')->middleware(['auth']);
+});
+
+// Dépenses
+Route::controller(DepenseController::class)->group(function () {
+    Route::get('/depenses', 'index')->name('depense.index')->middleware(['auth']);
+    Route::get('/depenses/archives', 'archives')->name('depense.archives')->middleware(['auth']);
+    Route::post('/depenses/ajouter', 'store')->name('depense.store')->middleware(['auth']);
+    Route::get('/depenses/show/{depenseId}', 'show')->name('depense.show')->middleware(['auth']);
+    Route::post('/depenses/modifier/{depenseId}', 'update')->name('depense.update')->middleware(['auth']);
+    Route::post('/depenses/archiver/{depenseId}', 'archiver')->name('depense.archive')->middleware(['auth']);
+    Route::post('/depenses/desarchiver/{depenseId}', 'desarchiver')->name('depense.unarchive')->middleware(['auth']);
+});
 
 // Prestations
 Route::controller(PrestationController::class)->group(function () {

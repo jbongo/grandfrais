@@ -2,8 +2,8 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
 
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = '';
-    $li_simulations = $li_utilisateur_show = $li_contact_show  = $li_catalogue_show = $li_parametre_show = false;
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_achat = $li_depense = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_type_depense = '';
+    $li_simulations = $li_utilisateur_show = $li_contact_show  = $li_catalogue_show = $li_parametre_show = $li_stock = $li_depense = $li_vente = false;
 
     switch ($curent_url[1]) {
         case '/':
@@ -75,6 +75,26 @@
             $li_catalogue_show = true;
             break;
 
+        case 'stocks':
+            $li_catalogue_stock = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+
+        case 'achats':
+            $li_catalogue_achat = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+
+        // Depenses
+        case 'depenses':
+            $li_depense = 'menuitem-active';
+            break;
+ 
+        // Ventes
+        case 'ventes':
+            $li_vente = 'menuitem-active';
+            break;
+
         // Paramètres
         case 'parametres':
             if (sizeof($curent_url) > 2) {
@@ -82,7 +102,10 @@
                     $li_parametre_contact = 'menuitem-active';
                 } elseif ($curent_url[2] == 'produit') {
                     $li_parametre_produit = 'menuitem-active';
+                }elseif($curent_url[2] == 'type-depense'){
+                    $li_parametre_type_depense = 'menuitem-active';
                 }
+                    
             } else {
                 $li_parametre_generaux = 'menuitem-active';
             }
@@ -90,31 +113,6 @@
             $li_parametre_show = true;
             break;
 
-        case 'ordres-simule':
-            if (sizeof($curent_url) > 3) {
-                switch (substr($curent_url[3], 0, 1)) {
-                    case '2':
-                        $li_ordre_simule_algo2 = 'menuitem-active';
-                        $li_simulations = 'true';
-                        break;
-                    case '3':
-                        $li_ordre_simule_algo3 = 'menuitem-active';
-                        $li_simulations = 'true';
-
-                        break;
-                    case '4':
-                        $li_ordre_simule_algo4 = 'menuitem-active';
-                        $li_simulations = 'true';
-
-                        break;
-
-                    default:
-                        $li_ordre_simule_algo1 = 'menuitem-active';
-                        $li_simulations = 'true';
-                        break;
-                }
-            }
-            break;
 
         default:
             // dd("default");
@@ -242,8 +240,40 @@
                             </li>
                         @endcan
 
+                        @can('permission', 'afficher-produit')
+                            <li class="{{ $li_catalogue_stock }}">
+                                <a href="{{ route('stock.index') }}">Stock </a>
+                            </li>
+                        @endcan
+
+                        @can('permission', 'afficher-achat')
+                            <li class="{{ $li_catalogue_achat }}">
+                                <a href="{{ route('achat.index') }}">Achats </a>
+                            </li>
+                        @endcan
+
                     </ul>
                 </div>
+            </li>
+        @endcan
+
+        @can('permission', 'afficher-vente')
+            <li class="side-nav-item {{ $li_vente }}">
+                <a href="{{ route('vente.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class=" uil-briefcase"></i>
+                    <span> Ventes </span>
+                </a>
+            </li>
+        @endcan
+        
+        @can('permission', 'afficher-depense')
+            <li class="side-nav-item {{ $li_depense }}">
+                <a href="{{ route('depense.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class=" uil-briefcase"></i>
+                    <span> Dépenses </span>
+                </a>
             </li>
         @endcan
 
@@ -284,6 +314,9 @@
                             </a>
                         </li>
                         <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Catalogue
+                            </a>
+                        </li>
+                        <li class="{{ $li_parametre_type_depense }}"> <a href="{{ route('typedepense.index') }}"> Type dépense
                             </a>
                         </li>
                     </ul>

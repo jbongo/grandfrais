@@ -21,23 +21,19 @@
                         <strong>{{ $errors->first('quantite') }}</strong>
                     </div>
                 @endif
-
             </div>
 
-            <div class="col-sm-6 col-xxl-4 mb-3">
-
-                <label for="quantite_min_vente" class="form-label">Quantité minimale pour la vente </label>
-                <input type="number" min="0" class="form-control" wire:model.defer="quantite_min_vente"
-                    name="quantite_min_vente" value="{{ old('quantite_min_vente') }}" id="quantite_min_vente">
-                @if ($errors->has('quantite_min_vente'))
-                    <br>
-                    <div class="alert alert-danger" role="alert">
-                        <i class="dripicons-wrong me-2"></i>
-                        <strong>{{ $errors->first('quantite_min_vente') }}</strong>
-                    </div>
-                @endif
-
+            <div class="col-sm-6 col-xxl-4 mb-3">              
+                <div class="mb-3">
+                    <label for="unite_mesure" class="form-label">Unité de mésure</label>
+                    <select wire:model.defer="unite_mesure" name="unite_mesure" id="unite_mesure"
+                        class="form-select select2">
+                        <option value="Kilo">Kilo</option>
+                        <option value="Unité">Unité</option>
+                    </select>
+                </div>               
             </div>
+
         </div>
 
 

@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\Typecontact;
 use App\Models\User;
 use App\Models\Individu;
+use App\Models\Role;
 use Auth;
 use Hash;
 use Illuminate\Support\Facades\Crypt;
@@ -47,8 +48,9 @@ class UtilisateurController extends Controller
     {
         
         $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();     
-
-        return view('utilisateur.add', compact('contactindividus'));
+        $roles = Role::where('archive', false)->get();
+        $individus = Individu::where('archive', false)->get();
+        return view('utilisateur.add', compact('contactindividus', 'roles', 'individus'));
     }
     
     /**
@@ -59,92 +61,115 @@ class UtilisateurController extends Controller
     public function edit($user_id)
     {
         
-        $user = User::where('contact_id', Crypt::decrypt($user_id))->first();
-
-        return view('utilisateur.edit', compact('user'));
+        $user = User::where('id', Crypt::decrypt($user_id))->first();
+     
+        $roles = Role::where('archive', false)->get();
+        $individus = Individu::where('archive', false)->get();
+        $infosUser = $user?->infos();
+        return view('utilisateur.edit', compact('user', 'roles', 'individus', 'infosUser'));
     }
     
     
     /**
-    *  
+    *   Ajouter un utilisateur
     */
     public function store(Request $request){
 
+        $request->validate([
+            'email' => 'required|email|unique:users',
+        ]);
         $typecontact = Typecontact::where('type', $request->type_contact)->first();
 
-        $contact = Contact::create([
-            "user_id" => Auth::user()->id,
-            "type" => $request->type_contact,
-            "nature" => $request->nature,
+        if($request->contact_existant){
 
-        ]);
-        
-        $contact->typeContacts()->attach($typecontact->id);
-        
-        $rand=rand();
-        $password = base64_encode($rand);
-        
-        
-        $user = User::create([
-            // 'name' => $request->name,
-            'email' => $request->email,
-            'contact_id' => $contact->id,
-            'password' => Hash::make($password),
-        ]);
-        
-        
-        
-        Individu::create([
-            "email" => $request->email,
-            "contact_id" => $contact->id,
-            "nom" => $request->nom,
-            "prenom" => $request->prenom,
+            $individu = Individu::where('id', $request->individu_id)->first();
+            $contact = $individu->contact;
+       
+
+        }else{
+            $contact = Contact::create([
+                "user_id" => Auth::user()->id,
+                "type" => $request->type_contact,
+                "nature" => $request->nature,    
+            ]);
+
+            Individu::create([
+                "email" => $request->email,
+                "contact_id" => $contact->id,
+                "nom" => $request->nom,
+                "prenom" => $request->prenom,
+                "civilite" => $request->civilite, 
+                "ville" => $request->ville,
+                "quartier" => $request->quartier,
+                "indicatif_fixe" => $request->indicatif_fixe,
+                "telephone_fixe" => $request->telephone_fixe,
+                "indicatif_mobile" => $request->indicatif_mobile,  
+                "telephone_mobile" => $request->telephone_mobile,  
+            ]);
             
-            "numero_voie" => $request->numero_voie,
-            "nom_voie" => $request->nom_voie,
-            "complement_voie" => $request->complement_voie,
-            "code_postal" => $request->code_postal,
-            "ville" => $request->ville,
-            "pays" => $request->pays,
-            "code_insee" => $request->code_insee,
-            "code_cedex" => $request->code_cedex,
-            "numero_cedex" => $request->numero_cedex,
-            "boite_postale" => $request->boite_postale,
-            "residence" => $request->residence,
-            "batiment" => $request->batiment,
-            "escalier" => $request->escalier,
-            "etage" => $request->etage,
-            "porte" => $request->porte, 
+            $contact->typecontacts()->attach($typecontact->id);
 
-            "civilite" => $request->civilite,
-            "date_naissance" => $request->date_naissance,
-            "lieu_naissance" => $request->lieu_naissance,
-            "nationalite" => $request->nationalite,
-            "situation_matrimoniale" => $request->situation_matrimoniale,
-            "nom_jeune_fille" => $request->nom_jeune_fille,
-            "telephone_fixe" => $request->telephone_fixe,
-            "telephone_mobile" => $request->telephone_mobile,
+        }
+        
+        $user = new User();
 
-            "civilite1" => $request->civilite1,
-            "nom1" => $request->nom1,
-            "prenom1" => $request->prenom1,
-            "telephone_fixe1" => $request->telephone_fixe1,
-            "telephone_mobile1" => $request->telephone_mobile1,
-            "email1" => $request->email1,
+        $user->email = $request->email;
+        $user->role_id = $request->role;
+        $user->contact_id = $contact->id;
+        $user->password = Hash::make($request->password);
 
-            "civilite2" => $request->civilite2,
-            "nom2" => $request->nom2,
-            "prenom2" => $request->prenom2,
-            "telephone_fixe2" => $request->telephone_fixe2,
-            "telephone_mobile2" => $request->telephone_mobile2,
-            "email2" => $request->email2,
+        $user->save();
 
-            "notes" => $request->notes,
+       return redirect('/utilisateurs')->with('ok', 'Utilisateur ajoute avec succes');
+        
+    }
 
+    /*
+    *   Modifier un utilisateur
+    */
+    public function update(Request $request, $user_id){
+// hasunique
+        $request->validate([
+          "email" => 'required|email',
         ]);
+        $user = User::where('id', Crypt::decrypt($user_id))->first();
+      
+  
+
+        $user->update([
+            'email' => $request->email,
+        ]);
+
+       
+      
+
+        $individu = Individu::where('contact_id', $user->contact_id)->first();
+
         
-        return back()->with('ok', 'Contact ajouté');
+        $individu->email = $request->email;
+        $individu->contact_id = $user->contact_id;
+        $individu->nom = $request->nom;
+        $individu->prenom = $request->prenom;
+        $individu->civilite = $request->civilite;
+        $individu->ville = $request->ville;
+        $individu->quartier = $request->quartier;
+        $individu->indicatif_fixe = $request->indicatif_fixe;
+        $individu->telephone_fixe = $request->telephone_fixe;
+        $individu->indicatif_mobile = $request->indicatif_mobile;
+        $individu->telephone_mobile = $request->telephone_mobile;
+
+
+
+        $individu->update();
+
         
+
+        $user->email = $request->email;
+        $user->role_id = $request->role;
+
+        $user->update();
+        
+        return back()->with('ok', 'Utilisateur modifié');
     }
 
     /**

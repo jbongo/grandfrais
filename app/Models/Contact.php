@@ -48,7 +48,7 @@ class Contact extends Model
      */
     public function infos()
     {
-        if($this->type == "individu"){
+        if($this->nature == "Personne physique"){
             return $this->individu;
         
         }else{

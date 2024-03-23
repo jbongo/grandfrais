@@ -20,6 +20,8 @@ final class IndividuArchiveTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
+    public string $sortField = 'created_at';
+    public string $sortDirection = 'desc';
     public $contactindividus;
     /*
     |--------------------------------------------------------------------------
@@ -98,7 +100,10 @@ final class IndividuArchiveTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            ->addColumn('name')
+            ->addColumn('nom', function(User $user) 
+            {
+                return "<span>" .$user->infos()?->nom ." " . $user->infos()?->prenom ."</span>";
+            })
             ->addColumn('email')
             ->addColumn('contact_id', function (User $user) {return $user->contact_id === null ? 'Non' : 'Oui';})
             ->addColumn('created_at_formatted', fn (User $user) => Carbon::parse($user->created_at)->format('d/m/Y'));
@@ -121,7 +126,7 @@ final class IndividuArchiveTable extends PowerGridComponent
     public function columns(): array
     {
         return [           
-            Column::make('Nom', 'name')->sortable()->searchable(),
+            Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
             Column::make('Contact lié', 'contact_id')->sortable()->searchable(),
             Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),

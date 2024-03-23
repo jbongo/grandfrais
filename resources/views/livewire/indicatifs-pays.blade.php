@@ -1,3 +1,4 @@
+<option value="+225">+225</option>
 <option value="+33">+33</option>
 <option value="+93">+93</option>
 <option value="+355">+355</option>
@@ -41,7 +42,6 @@
 <option value="+242">+242</option>
 <option value="+243">+243</option>
 <option value="+506">+506</option>
-<option value="+225">+225</option>
 <option value="+385">+385</option>
 <option value="+53">+53</option>
 <option value="+357">+357</option>
@@ -60,7 +60,6 @@
 <option value="+251">+251</option>
 <option value="+679">+679</option>
 <option value="+358">+358</option>
-<option value="+33">+33</option>
 <option value="+241">+241</option>
 <option value="+220">+220</option>
 <option value="+995">+995</option>

@@ -35,6 +35,7 @@ public $quantite;
 public $quantite_min_vente;
 public $gerer_stock;
 public $seuil_alerte_stock;
+public $unite_mesure;
 
     
     public function render()

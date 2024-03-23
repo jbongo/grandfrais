@@ -17,12 +17,9 @@
         <div class="col-12 mb-3" wire:ignore>
             <label for="description" class="form-label">Description *</label>
 
-            <textarea rows="10" id="description" name="description" wire:model.defer="description"> </textarea>
+            <textarea rows="5" id="description" name="description" wire:model.defer="description"> </textarea>
         </div>
     </div>
-
-
-
 
     <div class="col-lg-4 ">
 
@@ -49,49 +46,9 @@
                 </div>
 
             </div>
-            <div class="col-sm-6 col-lg-12 mb-3">
 
-                <label for="reference" class="form-label">Référence produit</label>
-                <input type="text" class="form-control" name="reference" wire:model.defer="reference"
-                    value="{{ old('reference') }}" id="reference" required>
-                @if ($errors->has('reference'))
-                    <br>
-                    <div class="alert alert-danger" role="alert">
-                        <i class="dripicons-wrong me-2"></i>
-                        <strong>{{ $errors->first('reference') }}</strong>
-                    </div>
-                @endif
-
-            </div>
-
-
-            <div class="col-sm-6 col-lg-12 mb-3">
-
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="type1" name="type" wire:model.defer="type" value="simple" required
-                        class="form-check-input">
-                    <label class="form-check-label" for="type1">
-                        Produit simple
-                    </label>
-
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="type2" name="type" wire:model.defer="type" value="declinaison"
-                        class="form-check-input">
-                    <label class="form-check-label" for="type2">
-                        Produit avec déclinaison
-                    </label>
-
-                </div>
-
-            </div>
 
         </div>
-
-
-
-
 
         <div class="col-12" wire:ignore>
             <div class="mb-3">
@@ -106,4 +63,45 @@
     </div>
 </div>
 
-@include('produit.components.add_essentiel2')
+<div class="row mt-4">
+    <div class="col-lg-8 mb-2">
+        <hr style="height: 10px; ">
+
+    </div>
+    <div class="col-12">
+
+        <div class="row">
+            <div class="col-sm-2 mb-2 mb-sm-0">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active show" id="v-pills-photo-tab" data-bs-toggle="pill" href="#v-pills-photo"
+                        role="tab" aria-controls="v-pills-photo" aria-selected="true">
+                        <i class="mdi mdi-align-vertical-distribute d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Photos du produit</span>
+                    </a>
+
+                </div>
+            </div> <!-- end col-->
+
+            <div class="col-sm-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade active show" id="v-pills-photo" role="tabpanel"
+                        aria-labelledby="v-pills-photo-tab">
+
+
+                        <div class="col-12 mb-3">
+                            <label for="images" class="form-label fw-bold fs-5 mb-2">Photo(s) du produit </label>
+                            <div class="fallback">
+                                <input name="images[]" wire:model.defer="images" id="images"
+                                    class=" btn btn-secondary image-multiple" accept="image/*" type="file"
+                                    multiple />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div> <!-- end tab-content-->
+            </div> <!-- end col-->
+        </div>
+        <!-- end row-->
+    </div>
+</div>

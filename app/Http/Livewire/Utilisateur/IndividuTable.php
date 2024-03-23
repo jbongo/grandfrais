@@ -21,6 +21,10 @@ final class IndividuTable extends PowerGridComponent
     use ActionButton;
     use WithExport;
     public $contactindividus;
+    public string $sortField = 'created_at';
+    public string $sortDirection = 'desc';
+
+    // afficher dans desc 
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -98,7 +102,10 @@ final class IndividuTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            ->addColumn('name')
+            ->addColumn('nom', function(User $user) 
+            {
+                return "<span>" .$user->infos()?->nom ." " . $user->infos()?->prenom ."</span>";
+            })
             ->addColumn('email')
             ->addColumn('contact_id', function (User $user) {return $user->contact_id === null ? '<div class="badge bg-danger ">Non</div>' : '<div class="badge bg-success ">Oui</div>';})
             ->addColumn('created_at_formatted', fn (User $user) => Carbon::parse($user->created_at)->format('d/m/Y'));
@@ -121,7 +128,7 @@ final class IndividuTable extends PowerGridComponent
     public function columns(): array
     {
         return [           
-            Column::make('Nom', 'name')->sortable()->searchable(),
+            Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
             Column::make('Contact lié', 'contact_id')->sortable()->searchable(),
             Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),
@@ -178,7 +185,7 @@ final class IndividuTable extends PowerGridComponent
                
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(User $user) {
-                    return ['route' => route('utilisateur.show', Crypt::encrypt($user->contact_id)),
+                    return ['route' => route('utilisateur.show', Crypt::encrypt($user->id)),
                     'tooltip' => "Afficher",
                     'permission' => Gate::allows('permission', 'afficher-utilisateur'),                    
                     ];
@@ -186,7 +193,7 @@ final class IndividuTable extends PowerGridComponent
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(User $user) {
-                return ['route' => route('utilisateur.edit', Crypt::encrypt($user->contact_id)),
+                return ['route' => route('utilisateur.edit', Crypt::encrypt($user->id)),
                 'tooltip' => "Modifier",
                 'permission' => Gate::allows('permission', 'modifier-utilisateur'),
                 

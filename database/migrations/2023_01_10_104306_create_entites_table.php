@@ -32,6 +32,7 @@ class CreateEntitesTable extends Migration
             $table->string("nom_voie")->nullable();
             $table->string("complement_voie")->nullable();
             $table->string("code_postal")->nullable();
+            $table->string('quartier')->nullable();
             $table->string("ville")->nullable();
             $table->string("pays")->nullable();
             $table->string("code_insee")->nullable();

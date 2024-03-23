@@ -24,20 +24,18 @@
 
             </div>
 
-            <div class="col-sm-6 col-xxl-4 mb-3">
-
-                <label for="quantite_min_vente" class="form-label">Quantité minimale pour la vente </label>
-                <input type="number" min="0" class="form-control" wire:model.defer="quantite_min_vente"
-                    name="quantite_min_vente" value="{{ old('quantite_min_vente') }}" id="quantite_min_vente">
-                @if ($errors->has('quantite_min_vente'))
-                    <br>
-                    <div class="alert alert-danger" role="alert">
-                        <i class="dripicons-wrong me-2"></i>
-                        <strong>{{ $errors->first('quantite_min_vente') }}</strong>
-                    </div>
-                @endif
-
+            <div class="col-sm-6 col-xxl-4 mb-3">              
+                <div class="mb-3">
+                    <label for="unite_mesure" class="form-label">Unité de mésure</label>
+                    <select wire:model.defer="unite_mesure" name="unite_mesure" id="unite_mesure"
+                        class="form-select select2">
+                        <option value="{{$produit->unite_mesure}}">{{$produit->unite_mesure}}</option>
+                        <option value="Kilo">Kilo</option>
+                        <option value="Unité">Unité</option>
+                    </select>
+                </div>               
             </div>
+
         </div>
 
 
@@ -52,7 +50,7 @@
 
         <div class="col-6">
             <div class="mb-3">
-                <label for="categorie_id" class="form-label">Activer la gestion de stock </label> <br>
+                <label for="gerer_stock" class="form-label">Activer la gestion de stock </label> <br>
 
                 <input type="checkbox" id="gerer_stock" name="gerer_stock" wire:model.defer="gerer_stock"
                     data-switch="info" />
@@ -92,7 +90,6 @@
                 @endif
             </div>
         </div>
-
 
     </div>
 

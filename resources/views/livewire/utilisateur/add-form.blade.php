@@ -23,7 +23,7 @@
                                 </label>
 
                                 <input type="email" id="email" name="email" wire:model.defer="email" required
-                                    value="{{ old('email') ? old('email') : '' }}" class="form-control">
+                                    value="{{ old('email') ? old('email') : '' }}" class="form-control emails">
                                 @if ($errors->has('email'))
                                     <br>
                                     <div class="alert alert-warning text-secondary " role="alert">
@@ -40,7 +40,7 @@
                                 </label>
 
                                 <p>
-                                    <input type="checkbox" id="contact_existant" data-switch="primary" />
+                                    <input type="checkbox" id="contact_existant" wire:model.defer="contact_existant" name="contact_existant" data-switch="primary" />
                                     <label for="contact_existant" data-on-label="Oui" data-off-label="Non"></label>
                                 </p>
 
@@ -77,12 +77,12 @@
 
 
                             <div class="mb-3 ancien_contact" wire:ignore>
-                                <label for="pays" class="form-label">
+                                <label for="individu_id" class="form-label">
                                     Contact
                                 </label>
 
-                                <select class="form-control select2" data-toggle="select2" id="individu"
-                                    style="width:100%" wire:model.defer="individu">
+                                <select class="form-control select2" data-toggle="select2" id="individu_id" name="individu_id"
+                                    style="width:100%" wire:model.defer="individu_id">
                                     @foreach ($individus as $individu)
                                         <option value="{{ $individu->id }}">{{ $individu->prenom }}
                                             {{ $individu->nom }}
@@ -90,12 +90,12 @@
                                     @endforeach
                                 </select>
 
-                                @if ($errors->has('pays'))
+                                @if ($errors->has('individu_id'))
                                     <br>
                                     <div class="alert alert-warning text-secondary " role="alert">
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                                             aria-label="Close"></button>
-                                        <strong>{{ $errors->first('pays') }}</strong>
+                                        <strong>{{ $errors->first('individu_id') }}</strong>
                                     </div>
                                 @endif
                             </div>
@@ -204,46 +204,7 @@
 
                                 {{-- <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
                                     value="" hidden> --}}
-                                <div class="mb-3">
-                                    <div class=" container_email_label">
-                                        <div class="">
-                                            <label for="email" class="form-label">
-                                                Email <span class="text-danger">*</span>
-                                            </label>
-                                        </div>
-                                        {{-- <div class="">
-                                            <a class="btn btn-warning add_field_button"
-                                                style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
-                                                    class="mdi mdi-plus-thick "></i> </a>
-                                        </div> --}}
-                                    </div>
-                                    <div class="input_fields_wrap">
-                                        <div class="container_email_input">
-                                            <div class="item_email">
-                                                <input type="email" id="email" name="email"
-                                                    wire:model.defer="email" required
-                                                    value="{{ old('email') ? old('email') : '' }}"
-                                                    class="form-control emails">
-                                            </div>
-                                            {{-- <div class="item_btn_remove">
-                                                <a class="btn btn-danger add_field_button"
-                                                    style="padding: 0.55rem 0.9rem;"><i
-                                                        class="mdi mdi-close-thick "></i> </a>
-    
-                                            </div> --}}
-                                        </div>
-                                    </div>
-
-                                    @if ($errors->has('email'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('email') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-
+                
 
 
                                 <div class="mb-3">
@@ -290,10 +251,10 @@
 
                                 <div class="mb-3 ">
                                     <label for="prenom" class="form-label">
-                                        Prénom(s) <span class="text-danger">*</span>
+                                        Prénom(s)
                                     </label>
                                     <input type="text" id="prenom" name="prenom" wire:model.defer="prenom"
-                                        required value="{{ old('prenom') ? old('prenom') : '' }}"
+                                         value="{{ old('prenom') ? old('prenom') : '' }}"
                                         class="form-control">
 
                                     @if ($errors->has('prenom'))
@@ -358,71 +319,7 @@
                             <div class="col-6">
 
 
-
-                                <div class="row">
-
-                                    <div class="col-lg-4">
-
-                                        <div class="row mb-3">
-                                            <div class="col-12">
-                                                <label for="telephone_fixe" class="form-label item_input">
-                                                    Numéro de voie
-                                                </label>
-                                            </div>
-                                            <div class="col-12">
-                                                <input type="number" min="1" id="numero_voie"
-                                                    name="numero_voie" wire:model.defer="numero_voie"
-                                                    value="{{ old('numero_voie') ? old('numero_voie') : '' }}"
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="row mb-3">
-                                            <div class="col-12">
-                                                <label for="nom_voie" class="form-label item_input">
-                                                    Nom de la voie
-                                                </label>
-                                            </div>
-                                            <div class="col-12">
-                                                <input type="text" id="nom_voie" name="nom_voie"
-                                                    wire:model.defer="nom_voie"
-                                                    value="{{ old('nom_voie') ? old('nom_voie') : '' }}"
-                                                    class="form-control">
-                                            </div>
-
-                                            @if ($errors->has('nom_voie'))
-                                                <br>
-                                                <div class="alert alert-warning text-secondary " role="alert">
-                                                    <button type="button" class="btn-close btn-close-white"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                    <strong>{{ $errors->first('nom_voie') }}</strong>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="code_postal" class="form-label">
-                                        Code Postal
-                                    </label>
-                                    <input type="text" id="code_postal" name="code_postal"
-                                        wire:model.defer="code_postal"
-                                        value="{{ old('code_postal') ? old('code_postal') : '' }}"
-                                        class="form-control">
-
-                                    @if ($errors->has('code_postal'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('code_postal') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
+                                
                                 <div class="mb-3">
                                     <label for="ville" class="form-label">
                                         Ville
@@ -445,60 +342,19 @@
 
 
                             <div class="col-6">
-
                                 <div class="mb-3">
-                                    <label for="complement_voie" class="form-label">
-                                        Complément de voie
+                                    <label for="quartier" class="form-label">
+                                        Quartier
                                     </label>
-                                    <input type="text" id="complement_voie" name="complement_voie"
-                                        wire:model.defer="complement_voie"
-                                        value="{{ old('complement_voie') ? old('complement_voie') : '' }}"
-                                        class="form-control">
+                                    <input type="text" id="quartier" name="quartier" wire:model.defer="quartier"
+                                        value="{{ old('quartier') ? old('quartier') : '' }}" class="form-control">
 
-                                    @if ($errors->has('complement_voie'))
+                                    @if ($errors->has('quartier'))
                                         <br>
                                         <div class="alert alert-warning text-secondary " role="alert">
                                             <button type="button" class="btn-close btn-close-white"
                                                 data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('complement_voie') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="mb-3" wire:ignore>
-                                    <label for="pays" class="form-label">
-                                        Pays
-                                    </label>
-
-                                    <select class="form-control select2" data-toggle="select2" id="pays"
-                                        name="pays" style="width:100%" wire:model.defer="pays">
-
-                                        @include('livewire.pays')
-
-                                    </select>
-
-                                    @if ($errors->has('pays'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('pays') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-
-
-
-                                <div class="mb-3">
-                                    <label for="notes" class="form-label">Notes</label>
-                                    <textarea name="notes" wire:model.defer="notes" class="form-control" id="notes" rows="5"
-                                        placeholder="...">{{ old('notes') ? old('notes') : '' }}</textarea>
-                                    @if ($errors->has('notes'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('notes') }}</strong>
+                                            <strong>{{ $errors->first('quartier') }}</strong>
                                         </div>
                                     @endif
                                 </div>
@@ -510,7 +366,7 @@
                     <div class="row mt-3">
                         <div class="modal-footer">
 
-                            <button type="submit" id="enregistrer" wire:click="submit"
+                            <button type="submit" id="enregistrerx" wire:click="submit"
                                 class="btn btn-primary">Enregistrer</button>
 
                         </div>

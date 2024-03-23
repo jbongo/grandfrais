@@ -67,7 +67,7 @@ class ProduitController extends Controller
             "type" => "simple",
             "nature" => $request->nature,
             "description" => $request->description,
-            "reference" => $request->reference,
+            // "reference" => $request->reference,
             "user_id" => Auth::user()->id,
             "marque_id" => $request->marque,
             "prix_vente_ht" => $request->prix_vente_ht,
@@ -78,6 +78,7 @@ class ProduitController extends Controller
             "prix_achat_ttc" => $request->prix_achat_ttc,
             "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
             "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
+            "unite_mesure" => $request->unite_mesure,
             "gerer_stock" => $request->gerer_stock ? true : false,
          
         ]);
@@ -156,7 +157,7 @@ class ProduitController extends Controller
         $produit->nom = $request->nom;
         $produit->description = $request->description;
         $produit->nature = $request->nature;
-        $produit->reference = $request->reference;
+        // $produit->reference = $request->reference;
         $produit->marque_id = $request->marque;
         $produit->prix_vente_ht = $request->prix_vente_ht;
         $produit->prix_vente_ttc = $request->prix_vente_ttc;
@@ -166,6 +167,7 @@ class ProduitController extends Controller
         $produit->prix_achat_ttc = $request->prix_achat_ttc;
         $produit->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht;
         $produit->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc;
+        $produit->unite_mesure = $request->unite_mesure;
         $produit->gerer_stock = $request->gerer_stock ? true : false;
         
         

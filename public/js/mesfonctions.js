@@ -65,7 +65,7 @@ function initAutocomplete() {
         document.getElementById('nom_voie'), {
             types: ['address'],
             componentRestrictions: {
-                'country': ['FR']
+                'country': ['CI']
             },
             fields: ['address_components', 'address_components', 'adr_address', 'formatted_address', 'name',
                 'vicinity'
@@ -77,7 +77,7 @@ function initAutocomplete() {
         document.getElementById('code_postal'), {
             types: ['postal_code'],
             componentRestrictions: {
-                'country': ['FR']
+                'country': ['CI']
             },
             fields: ['name', 'vicinity']
         }
@@ -87,7 +87,7 @@ function initAutocomplete() {
         document.getElementById('ville'), {
             types: ['geocode'],
             componentRestrictions: {
-                'country': ['FR']
+                'country': ['CI']
             },
             fields: ['address_components', 'address_components', 'adr_address', 'formatted_address', 'name',
                 'vicinity'
