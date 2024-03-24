@@ -57,16 +57,7 @@ class Produit extends Model
     }
     
     
-    /**
-     * Get the stock associated with the Produit
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function stock()
-    {
-        return $this->hasOne(Stock::class);
-    }
-    
+   
     /**
      * The Valeurcaracteristiques that belong to the Produit
      *

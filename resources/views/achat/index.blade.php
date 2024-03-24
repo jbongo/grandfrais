@@ -68,9 +68,13 @@
                         <div class="d-flex justify-content-between">
                             @can('permission', 'ajouter-contact')
                                 <div class="d-flex justify-content-start">
-                                    <a href="{{ route('achat.create') }}" class="btn btn-primary mb-2">
+                                  
+                                    <a class="btn btn-primary mb-2" href="#standard-modal-achat" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#standard-modal-achat">
                                         <i class="mdi mdi-plus-circle me-2"></i> Ajouter achat
-                                    </a>                             
+                                    </a>   
+                                    
+
+
                                 </div>
                             @endcan
                             
@@ -125,6 +129,115 @@
             </div> <!-- end col -->
         </div>
         <!-- end row -->
+
+
+
+{{-- Ajout d'une achat --}}
+<div id="standard-modal-achat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="standard-modalLabel">Ajouter une achat</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('achat.store') }}" method="post" id="form-add-achat">
+                <div class="modal-body">
+                    @csrf
+    
+    
+                    <div class="row">
+                      
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+    
+                                    <div class="row">
+    
+    
+                                        <div class="col-sm-6">
+    
+    
+                                            <div class="mb-3">
+                                                <label for="produit_id" class="form-label">
+                                                    Produit <span class="text-danger">*</span>
+                                                </label>
+    
+                                                {{-- <select name="produit_id" id="produit_id"   class="select2 form-control select2-multiple"  data-toggle="select2"  data-placeholder=" ..."> --}}
+                                                <select name="produit_id" id="produit_id"  class="select2 form-control select2-multiplex" data-toggle="select2" multiple="multiple" required data-placeholder=" ...">                                                  
+                                                    @foreach ($produits as $produit)
+                                                        <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                                    @endforeach
+                                                </select>                                             
+    
+                                                @if ($errors->has('produit_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('produit_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>    
+    
+    
+                                            <div class="mb-3">
+                                                <label for="date_achat" class="form-label">
+                                                    Date de achat <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="date" id="date_achat" name="date_achat" required
+                                                    value="{{date('Y-m-d')}}"
+                                                    class="form-control">
+    
+                                                @if ($errors->has('date_achat'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('date_achat') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>        
+                                        </div>
+    
+                                        <div class="col-sm-6">    
+                                            <div class="mb-3">
+                                                <label for="quantite" class="form-label">
+                                                    Quantité <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1" id="quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('quantite'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('quantite') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+    
+    
+                                    <!-- end row -->
+    
+                                </div> <!-- end card-body -->
+                            </div> <!-- end card-->
+                        </div> <!-- end col-->
+                    </div>
+    
+    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+    
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
 
 
 

@@ -67,19 +67,19 @@ class ProduitController extends Controller
             "type" => "simple",
             "nature" => $request->nature,
             "description" => $request->description,
-            // "reference" => $request->reference,
+   
             "user_id" => Auth::user()->id,
             "marque_id" => $request->marque,
             "prix_vente_ht" => $request->prix_vente_ht,
             "prix_vente_ttc" => $request->prix_vente_ttc,
-            "prix_vente_max_ht" => $request->prix_vente_max_ht,
-            "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
+
             "prix_achat_ht" => $request->prix_achat_ht,
             "prix_achat_ttc" => $request->prix_achat_ttc,
-            "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
-            "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
-            "unite_mesure" => $request->unite_mesure,
+            
+            "unite_mesure_stock" => $request->unite_mesure,
             "gerer_stock" => $request->gerer_stock ? true : false,
+            "quantite_stock" => $request->quantite,
+            "seuil_alerte_stock" => $request->seuil_alerte_stock,
          
         ]);
         
@@ -89,19 +89,6 @@ class ProduitController extends Controller
         
         
       
-        // stock
-        if( $request->gerer_stock){
-        
-            $stock = Stock::create([
-                "produit_id" => $produit->id,
-                "quantite" => $request->quantite,
-                "quantite_min" => $request->quantite_min_vente,
-                "seuil_alerte" => $request->seuil_alerte_stock,
-               
-            ]);
-            
-        }
-       
         if($request->hasFile('fiche_technique')){
          
             $filename = 'fiche_technique_'.$produit->id.'.pdf';
@@ -117,7 +104,7 @@ class ProduitController extends Controller
         }
         
         
-        return redirect()->back()->with('ok', 'Nouveau produit ajouté');
+        return redirect()->route('produit.index')->with('ok', 'Nouveau produit ajouté');
     }
 
     /**
@@ -157,50 +144,21 @@ class ProduitController extends Controller
         $produit->nom = $request->nom;
         $produit->description = $request->description;
         $produit->nature = $request->nature;
-        // $produit->reference = $request->reference;
         $produit->marque_id = $request->marque;
         $produit->prix_vente_ht = $request->prix_vente_ht;
         $produit->prix_vente_ttc = $request->prix_vente_ttc;
-        $produit->prix_vente_max_ht = $request->prix_vente_max_ht;
-        $produit->prix_vente_max_ttc = $request->prix_vente_max_ttc;
         $produit->prix_achat_ht = $request->prix_achat_ht;
         $produit->prix_achat_ttc = $request->prix_achat_ttc;
-        $produit->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht;
-        $produit->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc;
-        $produit->unite_mesure = $request->unite_mesure;
+
+        $produit->unite_mesure_stock = $request->unite_mesure;
         $produit->gerer_stock = $request->gerer_stock ? true : false;
+        $produit->quantite_stock = $request->quantite;
+        $produit->seuil_alerte_stock = $request->seuil_alerte_stock;
+        
         
         
         $produit->update();
-        
 
-
-        // stock
-        if( $request->gerer_stock){        
-        
-            $stock = Stock::where('produit_id', $produit->id)->first();
-            
-            if($stock == null){
-            
-                $stock = Stock::create([
-                    "produit_id" => $produit->id,
-                    "quantite" => $request->quantite,
-                    "quantite_min" => $request->quantite_min_vente,
-                    "seuil_alerte" => $request->seuil_alerte_stock,
-                   
-                ]);
-            
-            }else{
-                $stock->quantite = $request->quantite;
-                $stock->quantite_min = $request->quantite_min_vente;
-                $stock->seuil_alerte = $request->seuil_alerte_stock;
-                $stock->update(); 
-            }
-                
-                       
-             
-        }
-        
         
         if($request->categories_id){
         
@@ -213,7 +171,6 @@ class ProduitController extends Controller
         if($request->hasFile('fiche_technique') ){
          
         //  Supprimer l'ancienne fiche technique
-            // return response()->download(storage_path('app/pdf_compromis/pdf_compro.pdf'));
             $file_path = storage_path('app/public/fiche_technique/');
             
             $file_path .= $produit->fiche_technique;
@@ -239,7 +196,7 @@ class ProduitController extends Controller
         }
         
         
-        return redirect()->back()->with('ok', 'Produit modifié');
+        return redirect()->route('produit.index')->with('ok', 'Produit modifié');
         
         
     }
@@ -263,8 +220,7 @@ class ProduitController extends Controller
     
         $images = $request->file('images');
          
-        
-        
+
         if (!is_array($images)) {
             $images = [$images];
         }
@@ -282,7 +238,7 @@ class ProduitController extends Controller
             }
         }
 
-        
+                
        
         for ($i = 0; $i < count($images); $i++) {
             $photo = $images[$i];
@@ -307,8 +263,6 @@ class ProduitController extends Controller
             }else{
                   $image_position = max($image_position ) + 1;
             }
-          
-            
 
             Imageproduit::create([
                 "produit_id" => $produit_id,

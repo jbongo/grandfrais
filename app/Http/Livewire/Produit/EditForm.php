@@ -24,12 +24,9 @@ class EditForm extends Component
     public $a_declinaison;
     public $prix_vente_ht;
     public $prix_vente_ttc;
-    public $prix_vente_max_ht;
-    public $prix_vente_max_ttc;
     public $prix_achat_ht;
     public $prix_achat_ttc;
-    public $prix_achat_commerciaux_ht;
-    public $prix_achat_commerciaux_ttc;
+
     
     public $quantite;
     public $quantite_min_vente;
@@ -55,17 +52,12 @@ class EditForm extends Component
         $this->marque = $this->produit->marque_id;
         $this->prix_vente_ht = $this->produit->prix_vente_ht;
         $this->prix_vente_ttc = $this->produit->prix_vente_ttc;
-        $this->prix_vente_max_ht = $this->produit->prix_vente_max_ht;
-        $this->prix_vente_max_ttc = $this->produit->prix_vente_max_ttc;
         $this->prix_achat_ht = $this->produit->prix_achat_ht;
         $this->prix_achat_ttc = $this->produit->prix_achat_ttc;
-        $this->prix_achat_commerciaux_ht = $this->produit->prix_achat_commerciaux_ht;
-        $this->prix_achat_commerciaux_ttc = $this->produit->prix_achat_commerciaux_ttc;
         
-        $this->quantite =  $this->produit->gerer_stock == true ? $this->produit->stock->quantite : null;
-        $this->quantite_min_vente =  $this->produit->gerer_stock == true ? $this->produit->stock->quantite_min : null;
+        $this->quantite =  $this->produit->gerer_stock == true ? $this->produit->quantite_stock : null;
         $this->gerer_stock = $this->produit->gerer_stock;
-        $this->seuil_alerte_stock =  $this->produit->gerer_stock == true ? $this->produit->stock->seuil_alerte : null;
+        $this->seuil_alerte_stock =  $this->produit->gerer_stock == true ? $this->produit->seuil_alerte_stock : null;
     
     }
     

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tvas', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->float('taux');
+            $table->string('nom')->nullable();
+            $table->float('taux')->nullable();
             $table->boolean('archive')->default(false);
             $table->timestamps();
         });

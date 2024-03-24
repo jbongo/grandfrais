@@ -24,15 +24,11 @@ public $nature;
 public $marques;
 public $prix_vente_ht;
 public $prix_vente_ttc;
-public $prix_vente_max_ht;
-public $prix_vente_max_ttc;
 public $prix_achat_ht;
 public $prix_achat_ttc;
-public $prix_achat_commerciaux_ht;
-public $prix_achat_commerciaux_ttc;
+
 
 public $quantite;
-public $quantite_min_vente;
 public $gerer_stock;
 public $seuil_alerte_stock;
 public $unite_mesure;

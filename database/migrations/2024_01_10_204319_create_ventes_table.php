@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('client_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('quantite')->nullable();
-            $table->integer('prix_unitaire')->nullable();
-            $table->integer('prix_total')->nullable();
+            $table->double('prix_unitaire')->nullable();
+            $table->double('prix_total')->nullable();
             $table->date('date_vente')->nullable();
             $table->string('statut')->nullable();
             $table->string('archive')->default(false);

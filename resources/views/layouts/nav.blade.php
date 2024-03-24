@@ -2,8 +2,8 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
 
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_achat = $li_depense = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_type_depense = '';
-    $li_simulations = $li_utilisateur_show = $li_contact_show  = $li_catalogue_show = $li_parametre_show = $li_stock = $li_depense = $li_vente = false;
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_catalogue_produit  = $li_catalogue_achat = $li_depense = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_type_depense = '';
+    $li_simulations = $li_utilisateur_show = $li_contact_show  = $li_catalogue_show = $li_parametre_show = $li_depense = $li_vente = false;
 
     switch ($curent_url[1]) {
         case '/':
@@ -58,10 +58,7 @@
             $li_catalogue_produit = 'menuitem-active';
             $li_catalogue_show = true;
             break;
-        case 'stocks':
-            $li_catalogue_stock = 'menuitem-active';
-            $li_catalogue_show = true;
-            break;
+
         case 'categories':
             $li_catalogue_categorie = 'menuitem-active';
             $li_catalogue_show = true;
@@ -75,10 +72,6 @@
             $li_catalogue_show = true;
             break;
 
-        case 'stocks':
-            $li_catalogue_stock = 'menuitem-active';
-            $li_catalogue_show = true;
-            break;
 
         case 'achats':
             $li_catalogue_achat = 'menuitem-active';
@@ -217,7 +210,7 @@
 
         @can('permission', 'afficher-produit')
             <li
-                class="side-nav-item{{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
+                class="side-nav-item{{ $li_catalogue_produit }}  {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
                 <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
                     class="side-nav-link">
                     <i class="mdi  mdi-beaker-outline"></i>
@@ -228,21 +221,9 @@
                     <ul class="side-nav-second-level">
                         <li class="{{ $li_catalogue_produit }}"><a href="{{ route('produit.index') }}"> Produits </a></li>
 
-                        {{-- @can('permission', 'afficher-stock')
-                            <li class="{{ $li_catalogue_stock }}"><a href="#"> Stock </a></li>
-                        @endcan
-                        @can('permission', 'afficher-categorie-produit')
-                            <li class="{{ $li_catalogue_categorie }}"><a href="#"> Catégories </a></li>
-                        @endcan --}}
                         @can('permission', 'afficher-caracteristique-produit')
                             <li class="{{ $li_catalogue_caracteristique }}">
                                 <a href="{{ route('caracteristique.index') }}">Caractéristiques </a>
-                            </li>
-                        @endcan
-
-                        @can('permission', 'afficher-produit')
-                            <li class="{{ $li_catalogue_stock }}">
-                                <a href="{{ route('stock.index') }}">Stock </a>
                             </li>
                         @endcan
 
@@ -277,16 +258,7 @@
             </li>
         @endcan
 
-
-        @can('permission', 'afficher-contact')
-            <li class="side-nav-item {{ $li_agenda }}">
-                <a href="{{ route('prestation.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
-                    class="side-nav-link">
-                    <i class=" uil-briefcase"></i>
-                    <span> Prestations </span>
-                </a>
-            </li>
-        @endcan
+        
         @can('permission', 'afficher-agenda')
             <li class="side-nav-item {{ $li_agenda }}">
                 <a href="{{ route('agenda.listing') }}" aria-expanded="false" aria-controls="sidebarDashboards"

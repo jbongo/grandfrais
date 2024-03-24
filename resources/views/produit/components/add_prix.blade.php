@@ -9,7 +9,7 @@
 
         <div class="row">
 
-            <div class=" col-sm-6 col-lg-6 col-xxl-4 mb-3">
+            {{-- <div class=" col-sm-6 col-lg-6 col-xxl-4 mb-3">
                 <label for="prix_vente_ht" class="form-label">Montant HT *</label>
                 <input type="number" step="0.001" min="0" class="form-control"
                     wire:model.defer="prix_vente_ht" name="prix_vente_ht" value="{{ old('prix_vente_ht') }}"
@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-            </div>
+            </div> --}}
 
             <div class=" col-sm-6 col-lg-6 col-xxl-4">
 
@@ -47,7 +47,7 @@
 
     <div class="col-lg-6">
 
-        <div class="col-12">
+        {{-- <div class="col-12">
             <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">&nbsp;</label>
         </div>
 
@@ -57,13 +57,13 @@
                 <select wire:model.defer="categorie_id" name="categorie_id" id="categorie_id"
                     class="form-select select2">
                     <option value="">Aucune taxe</option>
-                    {{-- @foreach ($tvas as $tva)
+                    @foreach ($tvas as $tva)
                         <option value="{{ $tva->id }}">{{ $tva->nom }}
                         </option>
-                    @endforeach --}}
+                    @endforeach
                 </select>
             </div>
-        </div>
+        </div> --}}
 
     </div>
 </div>
@@ -81,7 +81,7 @@
 
         <div class="row">
 
-            <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
+            {{-- <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
                 <label for="prix_achat_ht" class="form-label">Montant HT </label>
                 <input type="number" step="0.001" min="0" class="form-control"
                     wire:model.defer="prix_achat_ht" name="prix_achat_ht" value="{{ old('prix_achat_ht') }}"
@@ -94,7 +94,7 @@
                     </div>
                 @endif
 
-            </div>
+            </div> --}}
 
             <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
 

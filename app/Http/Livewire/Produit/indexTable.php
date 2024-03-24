@@ -135,16 +135,16 @@ final class indexTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
-            ->addColumn('type', function (Produit $model) {
-                if($model->type == "simple"){
-                    $color = "btn-secondary ";
-                }
-                else{
-                    $color = "btn-light ";                
-                }
-                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
-            } )
-            ->addColumn('nature')
+            // ->addColumn('type', function (Produit $model) {
+            //     if($model->type == "simple"){
+            //         $color = "btn-secondary ";
+            //     }
+            //     else{
+            //         $color = "btn-light ";                
+            //     }
+            //     return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
+            // } )
+            // ->addColumn('nature')
             
             ->addColumn('image', function (Produit $model) {
                 if($model->imageproduits != null && sizeof($model->imageproduits)>0 ){
@@ -157,7 +157,7 @@ final class indexTable extends PowerGridComponent
                     
                 }
             } )
-            ->addColumn('reference')
+            // ->addColumn('reference')
             ->addColumn('nom')
             ->addColumn('categorie',function (Produit $model){
                 
@@ -172,15 +172,15 @@ final class indexTable extends PowerGridComponent
                 
                 return $cats;
             } )
-            ->addColumn('prix_vente_ht',function (Produit $model){
+            ->addColumn('prix_vente_ttc',function (Produit $model){
                 
               
-                return $model->prix_vente_ht;
+                return $model->prix_vente_ttc;
             })
             ->addColumn('stock',function (Produit $model){
                 
-                if($model->stock){
-                    return $model->stock->quantite;
+                if($model->gerer_stock){
+                    return $model->quantite_stock;
                 }
                 return "non géré";
             });
@@ -205,13 +205,13 @@ final class indexTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(), 
-            Column::make('Nature', 'nature')->sortable()->searchable(),
+            // Column::make('Type', 'type')->sortable()->searchable(), 
+            // Column::make('Nature', 'nature')->sortable()->searchable(),
             Column::make('Image', 'image')->sortable()->searchable(),
-            Column::make('Référence', 'reference')->sortable()->searchable(),
+            // Column::make('Référence', 'reference')->sortable()->searchable(),
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Catégories', 'categorie')->sortable()->searchable(),
-            Column::make('Prix de vente HT', 'prix_vente_ht')->sortable()->searchable(),
+            Column::make('Prix de vente ', 'prix_vente_ttc')->sortable()->searchable(),
             Column::make('Stock', 'stock')->sortable()->searchable(),
 
 
