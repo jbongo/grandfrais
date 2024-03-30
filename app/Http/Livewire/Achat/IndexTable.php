@@ -106,22 +106,32 @@ final class IndexTable extends PowerGridComponent
     
         return PowerGrid::columns()
       
-            ->addColumn('numero', function (Achat $model) {          
-                return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model->numero.'</span>';
-           
+            ->addColumn('produit', function (Achat $model) {          
+                return  '<span class="text-danger font-bold py-1 px-2 fs-5">'.$model->produit?->nom.'</span>';
             } )
-            ->addColumn('nom')
-            ->addColumn('montant_ttc')
-            ->addColumn('client', function (Achat $model) { 
-                if($model->client()?->type == 'individu'){
-                    return  '<span >'.$model->client()?->individu?->civilite.' '.$model->client()?->individu?->nom.' '.$model->client()?->individu?->prenom.'</span>';
+            ->addColumn('quantite', function(Achat $model) {
+                return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model->quantite.'</span>';
+            })
+       
+            ->addColumn('prix_unitaire', function(Achat $model) {
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,' ').'</span>';
+            })
+            ->addColumn('prix_total', function(Achat $model) {
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_total,0,' ').'</span>';
+            })
+            ->addColumn('fournisseur', function (Achat $model) { 
+
+                if($model->fournisseur?->nature == 'Personne physique'){
+                    return  '<span >'.$model->fournisseur?->individu?->civilite.' '.$model->fournisseur?->individu?->nom.' '.$model->fournisseur?->individu?->prenom.'</span>';
                 }else{
-                    return  '<span >'.$model->client()?->entite?->raison_sociale.'</span>';
+                    return  '<span >'.$model->fournisseur?->entite?->raison_sociale.'</span>';
                 }
             })
            
-            ->addColumn('notes')
-            ->addColumn('date_achat', fn (Achat $model) =>  $model->date_achat  )
+ 
+            ->addColumn('date_achat', function(Achat $model) {
+                return  Carbon::parse($model->date_achat)->format('d/m/Y');
+            })
             ->addColumn('user', function (Achat $model) {        
                 
                 $user = User::where('id', $model->user_id)->first();
@@ -131,7 +141,7 @@ final class IndexTable extends PowerGridComponent
                 return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
             })
             ->addColumn('created_date', function (Achat $model) {          
-                return $model->created_at->format('d-m-Y');
+                return $model->created_at->format('d/m/Y');
             });
             // ->addColumn('statut');
     }
@@ -154,13 +164,15 @@ final class IndexTable extends PowerGridComponent
     {
         $colums =  [
             // Column::make('Id', 'id'),
-            Column::make('Numero', 'numero')
+            Column::make('Produit', 'produit')
                 ->searchable()
                 ->sortable(),
-            Column::make('Nom', 'nom')->searchable()->sortable(),
-            Column::make('Montant', 'montant_ttc')->searchable()->sortable(),
-            Column::make('Client', 'client')->searchable()->sortable(),
-            Column::make('Notes', 'notes')->searchable()->sortable(),
+            Column::make('Quantité', 'quantite')->searchable()->sortable(),
+            Column::make('Prix unitaire', 'prix_unitaire')->searchable()->sortable(),
+            Column::make('Prix total', 'prix_total')->searchable()->sortable(),
+            Column::make('Fournisseur', 'fournisseur')->searchable()->sortable(),
+
+        
             Column::make('Date achat', 'date_achat')->searchable()->sortable(),  
             // Column::make('Statut', 'statut')->searchable()->sortable(),
             Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
@@ -205,11 +217,19 @@ final class IndexTable extends PowerGridComponent
     
     public function actions(): array
     {
+        
        return [
             Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Achat $achat) {
+            ->bladeComponent('button-edit-achat-modal', function(Achat $achat) {              
                 return ['route' => route('achat.edit', Crypt::encrypt($achat->id)),
                 'tooltip' => "Modifier",
+                'dateAchat' => $achat->date_achat,
+                'produitId' => $achat->produit_id,
+                'fournisseurId' => $achat->fournisseur_id,
+                'quantite' => $achat->quantite,
+                'prixTotal' => $achat->prix_total,
+
+                'achat'=> $achat,                
                 'permission' => Gate::allows('permission', 'modifier-contact'),
                 
                 ];

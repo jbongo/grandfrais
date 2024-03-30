@@ -131,15 +131,33 @@
         <!-- end row -->
 
 
+        {{-- 
+        
+        $prix_unitaire = $request->prix_unitaire;
+        $quantite = $request->quantite;
+        $prix_total = $prix_unitaire * $quantite;
 
-{{-- Ajout d'une achat --}}
+
+        $achat->produit_id = $request->produit_id;
+        $achat->user_id = Auth::user()->id;
+        $achat->quantite = $request->quantite;
+        $achat->prix_unitaire = $prix_unitaire;
+        $achat->prix_total = $prix_total;
+        $achat->date_achat = $request->date_achat;
+        
+        --}}
+
+
+
+{{-- Ajout d'un achat --}}
 <div id="standard-modal-achat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content ">
             <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Ajouter une achat</h4>
+                <h4 class="modal-title" id="standard-modalLabel">Ajouter un achat</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <form action="{{ route('achat.store') }}" method="post" id="form-add-achat">
                 <div class="modal-body">
                     @csrf
@@ -163,9 +181,10 @@
                                                 </label>
     
                                                 {{-- <select name="produit_id" id="produit_id"   class="select2 form-control select2-multiple"  data-toggle="select2"  data-placeholder=" ..."> --}}
-                                                <select name="produit_id" id="produit_id"  class="select2 form-control select2-multiplex" data-toggle="select2" multiple="multiple" required data-placeholder=" ...">                                                  
+                                                <select name="produit_id" id="produit_id"  class="select2 form-control select2-multiplex" data-toggle="select2"  required data-placeholder=" ...">                                                  
+                                                    <option value=""></option>
                                                     @foreach ($produits as $produit)
-                                                        <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                                        <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
                                                     @endforeach
                                                 </select>                                             
     
@@ -196,15 +215,44 @@
                                                         <strong>{{ $errors->first('date_achat') }}</strong>
                                                     </div>
                                                 @endif
-                                            </div>        
+                                            </div>
+                                            
+                                            
+                                            <div class=" mb-3">
+                                                <label for="fournisseur_id" class="form-label">
+                                                    Sélectionnez le fournisseur 
+                                                </label>
+                                                <select name="fournisseur_id" id="fournisseur_id" class=" form-control select2"
+                                                    data-toggle="select2" >
+                                                    <option value=""></option>
+                                                    @foreach ($contacts as $contact)
+                                                        @if($contact->nature == 'Personne physique')
+                                                            <option value="{{ $contact->id }}">
+                                                                {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
+                                                            </option>
+                                                        @else 
+                                                            <option value="{{ $contact->id }}">{{ $contact->entite?->raison_sociale }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('fournisseur_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('fournisseur_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
                                         </div>
     
                                         <div class="col-sm-6">    
                                             <div class="mb-3">
                                                 <label for="quantite" class="form-label">
-                                                    Quantité <span class="text-danger">*</span>
+                                                    Quantité (en kilo ou unité) <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="number"  min="1" id="quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
+                                                <input type="number"  min="1" step="0.01" id="quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
     
                                                 @if ($errors->has('quantite'))
                                                     <br>
@@ -212,6 +260,22 @@
                                                         <button type="button" class="btn-close btn-close-white"
                                                             data-bs-dismiss="alert" aria-label="Close"></button>
                                                         <strong>{{ $errors->first('quantite') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="prix_total" class="form-label">
+                                                    Prix total d'achat <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1" step="0.01" id="prix_total" name="prix_total" required value="{{ old('prix_total') ? old('prix_total') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('prix_total'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('prix_total') }}</strong>
                                                     </div>
                                                 @endif
                                             </div>
@@ -236,10 +300,157 @@
             </form>
         </div>
     </div>
+</div>
+
+
+{{-- Modification d'un achat --}}
+
+<div id="modal-edit-achat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="standard-modalLabel">Modification de l'achat</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="" method="post" id="form-edit-achat">
+                <div class="modal-body">
+                    @csrf
+    
+    
+                    <div class="row">
+                      
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+    
+                                    <div class="row">
+    
+    
+                                        <div class="col-sm-6">    
+    
+                                            <div class="mb-3">
+                                                <label for="edit_produit_id" class="form-label">
+                                                    Produit <span class="text-danger">*</span>
+                                                </label>
+                                                <select name="produit_id" id="edit_produit_id"  class="form-select " required >       
+                                                    <option value=""></option>                                           
+                                                    @foreach ($produits as $produit)
+                                                        <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
+                                                    @endforeach
+                                                </select>                                             
+    
+                                                @if ($errors->has('produit_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('produit_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>    
+    
+    
+                                            <div class="mb-3">
+                                                <label for="edit_dateachat" class="form-label">
+                                                    Date de achat <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="date" id="edit_dateachat" name="date_achat" required value=""
+                                                    class="form-control">
+    
+                                                @if ($errors->has('date_achat'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('date_achat') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            
+                                            
+                                            <div class=" mb-3">
+                                                <label for="edit_fournisseur_id" class="form-label">
+                                                    Sélectionnez le fournisseur 
+                                                </label>
+                                                <select name="fournisseur_id" id="edit_fournisseur_id" class="form-select " >
+                                                    <option value=""></option>
+                                                    @foreach ($contacts as $contact)
+                                                        @if($contact->nature == 'Personne physique')
+                                                            <option value="{{ $contact->id }}">
+                                                                {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
+                                                            </option>
+                                                        @else 
+                                                            <option value="{{ $contact->id }}">{{ $contact->entite?->raison_sociale }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('fournisseur_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('fournisseur_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                        </div>
+    
+                                        <div class="col-sm-6">    
+                                            <div class="mb-3">
+                                                <label for="edit_quantite" class="form-label">
+                                                    Quantité (en kilo ou unité) <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1" step="0.01" id="edit_quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('quantite'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('quantite') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="edit_prix_total" class="form-label">
+                                                    Prix total d'achat <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1" step="0.01" id="edit_prix_total" name="prix_total" required value="{{ old('prix_total') ? old('prix_total') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('prix_total'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('prix_total') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+    
+    
+                                    <!-- end row -->
+    
+                                </div> <!-- end card-body -->
+                            </div> <!-- end card-->
+                        </div> <!-- end col-->
+                    </div>
+    
+    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+    
+                </div>
+            </form>
+        </div>
     </div>
-
-
-
+</div>
 
 
     </div> <!-- End Content -->
@@ -266,49 +477,29 @@
         });
     </script>
 
-    {{-- selection du type de achat --}}
-
-    <script>
-        $('.div-entite').hide();
-
-        $('#type').change(function(e) {
-
-            if (e.currentTarget.value == "entité") {
-                $('.div-entite').show();
-                $('.div-individu').hide();
-
-            } else {
-                $('.div-entite').hide();
-                $('.div-individu').show();
-            }
-
-        });
-    </script>
-
-
     {{-- Modification d'un achat --}}
     <script>
         $('.edit-achat').click(function(e) {
 
             let that = $(this);
 
-            $('#edit-nom').val(that.data('nom'));
-            $('#edit-prenom').val(that.data('prenom'));
+            console.log(that.data('fournisseurid') );
+            
+            that.data('produitid') != "" ? $('#edit_produit_id option[value="' + that.data('produitid') + '"]').prop('selected', true) : $('#edit_produit_id').val('');
 
-            $('#edit-prospect').prop('checked', that.data('est-prospect'));
-            $('#edit-client').prop('checked', that.data('est-client'));
-            $('#edit-fournisseur').prop('checked', that.data('est-fournisseur'));
+            that.data('fournisseurid') != "" ?  $('#edit_fournisseur_id option[value="' + that.data('fournisseurid') + '"]').prop('selected', true) :  $('#edit_fournisseur_id').val(''); ; 
+        
 
-            $('#edit-email').val(that.data('email'));
-            $('#edit-achat1').val(that.data('achat1'));
-            $('#edit-achat2').val(that.data('achat2'));
-            $('#edit-adresse').val(that.data('adresse'));
-            $('#edit-code_postal').val(that.data('code-postal'));
-            $('#edit-ville').val(that.data('ville'));
+            $('#edit_dateachat').val(that.data('dateachat'));
+            
+            $('#edit_quantite').val(that.data('quantite'));
+            $('#edit_prix_total').val(that.data('prixtotal'));
 
+
+       
 
             let currentFormAction = that.data('href');
-            $('#form-edit').attr('action', currentFormAction);
+            $('#form-edit-achat').attr('action', currentFormAction);
 
 
 
@@ -345,9 +536,7 @@
             $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
 
 
-
-
-        })
+        });
 
 
 
