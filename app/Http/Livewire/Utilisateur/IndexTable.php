@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Livewire\Utilisateur;
-
 use App\Models\Contact;
 use App\Models\Individu;
 use App\Models\User;
@@ -16,11 +15,10 @@ use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 use Illuminate\Support\Facades\Gate;
 
-final class IndividuTable extends PowerGridComponent
+final class IndexTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
-    public $contactindividus;
     public string $sortField = 'created_at';
     public string $sortDirection = 'desc';
 
@@ -104,7 +102,7 @@ final class IndividuTable extends PowerGridComponent
         return PowerGrid::columns()
             ->addColumn('nom', function(User $user) 
             {
-                return "<span>" .$user->infos()?->nom ." " . $user->infos()?->prenom ."</span>";
+                return "<span>" .$user->contact?->nom ." " . $user->contact?->prenom ."</span>";
             })
             ->addColumn('email')
             ->addColumn('role', function(User $user)

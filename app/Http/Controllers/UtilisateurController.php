@@ -75,41 +75,27 @@ class UtilisateurController extends Controller
     */
     public function store(Request $request){
 
-        $request->validate([
-            'email' => 'required|email|unique:users',
-        ]);
-        $typecontact = Typecontact::where('type', $request->type_contact)->first();
-
-        if($request->contact_existant){
-
-            $individu = Individu::where('id', $request->individu_id)->first();
-            $contact = $individu->contact;
-       
-
-        }else{
-            $contact = Contact::create([
-                "user_id" => Auth::user()->id,
-                "type" => $request->type_contact,
-                "nature" => $request->nature,    
+            $request->validate([
+                'email' => 'required|email|unique:users',
             ]);
 
-            Individu::create([
+        
+
+            $contact = Contact::create([
+                "user_id" => Auth::user()->id,
+                "type" => $request->type,
                 "email" => $request->email,
-                "contact_id" => $contact->id,
                 "nom" => $request->nom,
                 "prenom" => $request->prenom,
                 "civilite" => $request->civilite, 
                 "ville" => $request->ville,
                 "quartier" => $request->quartier,
-                "indicatif_fixe" => $request->indicatif_fixe,
-                "telephone_fixe" => $request->telephone_fixe,
-                "indicatif_mobile" => $request->indicatif_mobile,  
-                "telephone_mobile" => $request->telephone_mobile,  
+                "indicatif_1" => $request->indicatif_1,
+                "telephone_1" => $request->telephone_1,
+                "indicatif_2" => $request->indicatif_2,  
+                "telephone_2" => $request->telephone_2,  
             ]);
-            
-            $contact->typecontacts()->attach($typecontact->id);
 
-        }
         
         $user = new User();
 
@@ -134,37 +120,26 @@ class UtilisateurController extends Controller
         ]);
         $user = User::where('id', Crypt::decrypt($user_id))->first();
       
-  
+        $contact = Contact::where('id', $user->contact_id)->first();
 
-        $user->update([
-            'email' => $request->email,
-        ]);
+        $contact->email = $request->email;
+        $contact->nom = $request->nom;
+        $contact->prenom = $request->prenom;
+        $contact->civilite = $request->civilite;
+        $contact->ville = $request->ville;
+        $contact->quartier = $request->quartier;
+        $contact->indicatif_1 = $request->indicatif_1;
+        $contact->telephone_1 = $request->telephone_1;
+        $contact->indicatif_2 = $request->indicatif_2;
+        $contact->telephone_2 = $request->telephone_2;
 
-       
-      
-
-        $individu = Individu::where('contact_id', $user->contact_id)->first();
-
-        
-        $individu->email = $request->email;
-        $individu->contact_id = $user->contact_id;
-        $individu->nom = $request->nom;
-        $individu->prenom = $request->prenom;
-        $individu->civilite = $request->civilite;
-        $individu->ville = $request->ville;
-        $individu->quartier = $request->quartier;
-        $individu->indicatif_fixe = $request->indicatif_fixe;
-        $individu->telephone_fixe = $request->telephone_fixe;
-        $individu->indicatif_mobile = $request->indicatif_mobile;
-        $individu->telephone_mobile = $request->telephone_mobile;
-
-
-
-        $individu->update();
-
+        $contact->update();
         
 
         $user->email = $request->email;
+        if($request->password){
+            $user->password = Hash::make($request->password);
+        }
         $user->role_id = $request->role;
 
         $user->update();

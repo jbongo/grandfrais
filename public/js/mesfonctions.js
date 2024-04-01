@@ -7,7 +7,7 @@ function formater_tel(selecteur_telephone, selecteur_indicatif){
 
     $(document).ready(function() {
     
-        $(selecteur_telephone).attr("placeholder", "Entrez le numéro sans le premier '0' ");
+        $(selecteur_telephone).attr("placeholder", "Entrez le numéro ");
 
  
 
@@ -19,10 +19,11 @@ function formater_tel(selecteur_telephone, selecteur_indicatif){
             var numeroFormate = '';
             
             for (var i = 0; i < numero.length; i++) {
-                if (i === 1) {
-                    numeroFormate += ' ';
-                }
-                if (i > 1 && (i - 1) % 2 === 0) {
+                // if (i === 1) {
+                //     numeroFormate += ' ';
+                //     console.log(i);
+                // }
+                if ( i > 1 && i % 2 === 0) {
                     numeroFormate += ' ';
                 }
                 numeroFormate += numero[i];
@@ -36,7 +37,7 @@ function formater_tel(selecteur_telephone, selecteur_indicatif){
             if (indicatif_fixe == "+33") {
                 numeroFormate = numeroFormate.substring(0, 13); // 9 chiffres + 4 espaces
             }else{
-                numeroFormate = numeroFormate.substring(0, 20); 
+                numeroFormate = numeroFormate.substring(0, 14); // 10 chiffres + 4 espaces 
             
             }
 

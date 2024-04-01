@@ -10,12 +10,8 @@
         initAutocomplete();
     });
     formater_tel("#telephone", "#indicatif");
-    formater_tel("#telephone_fixe", "#indicatif_fixe");
-    formater_tel("#telephone_mobile", "#indicatif_mobile");
-    formater_tel("#telephone_fixe1", "#indicatif_fixe1");
-    formater_tel("#telephone_mobile1", "#indicatif_mobile1");
-    formater_tel("#telephone_fixe2", "#indicatif_fixe2");
-    formater_tel("#telephone_mobile2", "#indicatif_mobile2");
+    formater_tel("#telephone_1", "#indicatif_1");
+    formater_tel("#telephone_2", "#indicatif_2");
 </script>
 
 

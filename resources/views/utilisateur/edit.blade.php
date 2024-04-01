@@ -117,6 +117,21 @@
                                                         </div>
                                                         @endif
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <label for="password" class="form-label">
+                                                            Mot de passe <span class="text-danger">(Si seulement vous souhaitez le modifier)</span>
+                                                        </label>
+                        
+                                                        <input type="text" id="password" name="password"  value="{{ old('password') ? old('password') : '' }}" class="form-control ">
+                                                        @if ($errors->has('password'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                                                    aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('password') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                         
                                                 </div>
                                                 <div class="col-sm-6">
@@ -147,7 +162,7 @@
                                             </div>
                         
                         
-                                            <div class="nouveau_contact" wire:ignore>
+                                            <div class="nouveau_contact" >
                                                 <div class="row mb-3">
                                                     <div class="col-12 " style="background:#7e7b7b; color:white!important; padding:10px ">
                                                         <strong>Informations principales</strong>
@@ -169,7 +184,7 @@
                         
                                                                 <div class="item_indicatif">
                                                                     <select class="form-select select2" id="civilite" name="civilite">
-                                                                        <option value="{{ $user->civilite }}">{{ $user->civilite }}</option>
+                                                                        <option value="{{ $user->contact?->civilite }}">{{ $user->contact?->civilite }}</option>
                                                                         <option value="M.">M.</option>
                                                                         <option value="Mme">Mme</option>
                                                                     </select>
@@ -188,7 +203,7 @@
                         
                                                                 <div class="item_input">
                                                                     <input type="text" id="nom" name="nom" required
-                                                                        value="{{ old('nom') ? old('nom') : $user->infos()?->nom }}" class="form-control">
+                                                                        value="{{ old('nom') ? old('nom') : $user->contact?->nom }}" class="form-control">
                                                                     @if ($errors->has('nom'))
                                                                     <br>
                                                                     <div class="alert alert-warning text-secondary " role="alert">
@@ -222,14 +237,14 @@
                                                         </style>
                         
                                                         <div class="mb-3">
-                                                            <label for="telephone_fixe" class="form-label">
-                                                                Téléphone Fixe
+                                                            <label for="telephone_1" class="form-label">
+                                                                Téléphone 1
                                                             </label>
                         
                                                             <div class="container_indicatif">
                                                                 <div class="item_indicatif">
-                                                                    <select class="form-select select2" id="indicatif_fixe"
-                                                                        name="indicatif_fixe" style="width:100%">
+                                                                    <select class="form-select select2" id="indicatif_1"
+                                                                        name="indicatif_1" style="width:100%">
                         
                                                                         @include('livewire.indicatifs-pays')
                         
@@ -238,19 +253,19 @@
                                                                 </div>
                                                                 
                                                                 <div class="item_input">
-                                                                    <input type="text" id="telephone_fixe" name="telephone_fixe"
-                                                                        value="{{ old('telephone_fixe') ? old('telephone_fixe') : $user->infos()?->telephone_fixe }}"
+                                                                    <input type="text" id="telephone_1" name="telephone_1"
+                                                                        value="{{ old('telephone_1') ? old('telephone_1') : $user->contact?->telephone_1 }}"
                                                                         class="form-control">
                                                                 </div>
                         
                                                             </div>
                         
-                                                            @if ($errors->has('telephone_fixe'))
+                                                            @if ($errors->has('telephone_1'))
                                                             <br>
                                                             <div class="alert alert-warning text-secondary " role="alert">
                                                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                                                                     aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('telephone_fixe') }}</strong>
+                                                                <strong>{{ $errors->first('telephone_1') }}</strong>
                                                             </div>
                                                             @endif
                                                         </div>
@@ -266,7 +281,7 @@
                                                                 Prénom(s)
                                                             </label>
                                                             <input type="text" id="prenom" name="prenom"
-                                                                value="{{ old('prenom') ? old('prenom') : $user->infos()?->prenom }}" class="form-control">
+                                                                value="{{ old('prenom') ? old('prenom') : $user->contact?->prenom }}" class="form-control">
                         
                                                             @if ($errors->has('prenom'))
                                                             <br>
@@ -279,13 +294,13 @@
                                                         </div>
                         
                                                         <div class="mb-3">
-                                                            <label for="telephone_mobile" class="form-label">
-                                                                Téléphone Mobile
+                                                            <label for="telephone_2" class="form-label">
+                                                                Téléphone 2
                                                             </label>
                                                             <div class="container_indicatif">
                                                                 <div class="item_indicatif">
-                                                                    <select class="form-select select2" id="indicatif_mobile"
-                                                                        name="indicatif_mobile" style="width:100%">
+                                                                    <select class="form-select select2" id="indicatif_2"
+                                                                        name="indicatif_2" style="width:100%">
                                                                         @include('livewire.indicatifs-pays')
                         
                                                                     </select>
@@ -293,19 +308,19 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="item_input">
-                                                                    <input type="text" id="telephone_mobile" name="telephone_mobile"
-                                                                        value="{{ old('telephone_mobile') ? old('telephone_mobile') : $user->infos()?->telephone_mobile }}"
+                                                                    <input type="text" id="telephone_2" name="telephone_2"
+                                                                        value="{{ old('telephone_2') ? old('telephone_2') : $user->contact?->telephone_2 }}"
                                                                         class="form-control">
                                                                 </div>
                         
                                                             </div>
                         
-                                                            @if ($errors->has('telephone_mobile'))
+                                                            @if ($errors->has('telephone_2'))
                                                             <br>
                                                             <div class="alert alert-warning text-secondary " role="alert">
                                                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                                                                     aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('telephone_mobile') }}</strong>
+                                                                <strong>{{ $errors->first('telephone_2') }}</strong>
                                                             </div>
                                                             @endif
                                                         </div>
@@ -343,7 +358,7 @@
                                                                 Quartier
                                                             </label>
                                                             <input type="text" id="quartier" name="quartier"
-                                                                value="{{ old('quartier') ? old('quartier') : $user->infos()?->quartier }}" class="form-control">
+                                                                value="{{ old('quartier') ? old('quartier') : $user->contact?->quartier }}" class="form-control">
                         
                                                             @if ($errors->has('quartier'))
                                                             <br>
@@ -402,22 +417,6 @@
 @endsection
 
 @section('script')
-    {{-- Ajout de contact existant --}}
-    <script>
-        $('.ancien_contact').hide();
-        $('#contact_existant').change(function() {
-
-            if ($(this)[0].checked == true) {
-                $('.ancien_contact').show();
-                $('.nouveau_contact').hide();
-
-            } else {
-                $('.ancien_contact').hide();
-                $('.nouveau_contact').show();
-            }
-        })
-    </script>
-
 
 
     @include('components.contact.edit_script')

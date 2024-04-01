@@ -97,7 +97,7 @@
 
                             </div>
                         </div>
-                        <livewire:utilisateur.individu-table />
+                        <livewire:utilisateur.index-table />
 
 
                     </div> <!-- end card-body-->
