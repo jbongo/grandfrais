@@ -105,7 +105,7 @@
 
 
                         <div class="table-responsive">
-                            <livewire:collaborateur.individu-table />
+                            <livewire:contact.index-table :type="'Collaborateur'" />
                         </div>
 
 

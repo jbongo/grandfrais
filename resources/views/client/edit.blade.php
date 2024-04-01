@@ -81,7 +81,7 @@
                         </div>
 
 
-                        <livewire:contact.edit-form :typecontact="'Client'" :contact="$contact" :cont="$cont"
+                        <livewire:contact.edit-form :type="'Client'" :contact="$contact" :cont="$cont"
                             :emails="$emails" />
 
 

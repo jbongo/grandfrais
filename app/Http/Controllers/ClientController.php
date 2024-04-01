@@ -20,41 +20,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->is_admin) {
-
-            // On réccupère tous les contacts
-            $contactentites = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Client');
-            })
-                ->where([["type", "entite"], ['archive', false]])
-                ->get();
-
-            $contactindividus = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Client');
-            })
-                ->where([["type", "individu"], ['archive', false]])
-                ->get();
-
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
-            $contactentites = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Client');
-            })
-                ->where([["type", "entité"], ['archive', false], ["user_id", $user->id]])
-                ->get();
-
-
-            $contactindividus = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Client');
-            })
-                ->where([["type", "individu"], ['archive', false], ["user_id", $user->id]])
-                ->get();
-        }
-
-
-        return view('client.index', compact('contactentites', 'contactindividus'));
+        return view('client.index' );
     }
 
     /**

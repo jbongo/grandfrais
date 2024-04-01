@@ -1,27 +1,23 @@
 <?php
 
-namespace App\Http\Livewire\Contact;
-
-use App\Models\Contact;
-use App\Models\Individu;
-use App\Models\EntiteIndividu;
-use Crypt;
-use Auth;
+namespace App\Http\Livewire\Client;
 
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
-use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
-use PowerComponents\LivewirePowerGrid\Filters\Filter;
-use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Collection;
+use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Footer;
+use PowerComponents\LivewirePowerGrid\Header;
+use PowerComponents\LivewirePowerGrid\Exportable;
+use PowerComponents\LivewirePowerGrid\PowerGrid;
+use PowerComponents\LivewirePowerGrid\PowerGridColumns;
+use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 
-
-final class AssociesTable extends PowerGridComponent
+final class ArchiveTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
-    public $entite_id;
+    public $contacts;
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -61,24 +57,11 @@ final class AssociesTable extends PowerGridComponent
      */
     public function datasource()
     {
-        $user = Auth::user();
     
-        $individus_existants = EntiteIndividu::where([['entite_id', intval($this->entite_id)]])->get();
-        $ids_existant = array();
+        $contacts = Contact::where('archive', true)->get();
+ 
         
-        foreach ($individus_existants as $ind) {
-            array_push($ids_existant, $ind->individu_id); 
-        }
-        
-        $contactsassocies = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                ->whereIn('individus.id', $ids_existant)
-                ->get();
-
-        return $contactsassocies;
+        return $contacts;
 
     }
 
@@ -116,20 +99,54 @@ final class AssociesTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            // ->addColumn('id')
-    
+          
+            ->addColumn('type', function (Contact $model) {
+                
+                $btn = "";
+                $type = $model->type;
+
+                if($type == "Prospect"){
+                    $color = "btn-secondary ";
+                }elseif($type == "Client"){
+                    $color = "btn-info";                
+                }elseif($type == "Fournisseur"){
+                    $color = "btn-warning";                
+                }
+                elseif($type == "Collaborateur"){
+                    $color = "btn-danger";                
+                }
+                else{
+                    $color = "btn-primary ";                
+                }
+                
+                $btn.='<div class="badge btn '.$color.' btn-sm font-11 mt-2">'.$type.'</div>';
+                    
+             
+                
+                return $btn;
+            } )
             ->addColumn('nom')
             ->addColumn('prenom')
-            ->addColumn('email',fn (Individu $model) => $model->email)
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
-            ->addColumn('adresse', function (Individu $model) {          
-                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
-            } )
-            ->addColumn('code_postal')
+            ->addColumn('email',fn (Contact $model) => $model->email)
+            ->addColumn('telephone_1', function(Contact $model) {
+                return  '<span >'.$model->indicatif_1.' '.$model->telephone_1.'</span>';
+            })
+            ->addColumn('telephone_2', function(Contact $model) {
+                return  '<span >'.$model->indicatif_2.' '.$model->telephone_2.'</span>';
+            })
+            ->addColumn('entreprise')
+            ->addColumn('notes')
             ->addColumn('ville')
-            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('quartier')
+            ->addColumn('user', function (Contact $model) {          
+                return  '<span >'.$model->user?->contact?->nom.' '.$model->user?->contact?->prenom.'</span>';
+            })
+            ->addColumn('created_at_formatted', fn (Contact $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -147,20 +164,29 @@ final class AssociesTable extends PowerGridComponent
       */
     public function columns(): array
     {
-        return [
+        $colums = [
             // Column::make('Id', 'id'),
-       
+            Column::make('Type', 'type')->sortable()->searchable(),            
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Prénom', 'prenom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
-            //Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            //Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            //Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
+            Column::make('Téléphone 1', 'telephone_1')->sortable()->searchable(),
+            Column::make('Téléphone 2', 'telephone_2')->sortable()->searchable(),
+            Column::make('Entreprise', 'entreprise')->sortable()->searchable(),
+            Column::make('Notes', 'notes')->sortable()->searchable(),
             Column::make('Ville', 'ville')->sortable()->searchable(),
-            //Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),
+            Column::make('Quartier', 'quartier')->sortable()->searchable(),
+            Column::make('Date de création', 'created_at_formatted', 'created_at')
+                ->sortable(),
 
         ];
+        
+        if(Auth::user()->is_admin ){
+            $colums[] = Column::make('Saisi par', 'user')->searchable()->sortable();
+        }
+        
+        return $colums;
+        
     }
 
     /**
@@ -172,16 +198,7 @@ final class AssociesTable extends PowerGridComponent
     {
     
         return [
-            // Filter::datetimepicker('created_at'),
-            // Filter::datetimepicker('nom'),
-            // Filter::inputText('nom')->operators(['contains']),
-            // Filter::inputText('prenom')->operators(['contains']),
-            // Filter::inputText('email')->operators(['contains']),
-            // Filter::inputText('telephone')->operators(['contains']),
-            // Filter::inputText('adresse')->operators(['contains']),
-            // Filter::inputText('code_postal')->operators(['contains']),
-            // Filter::inputText('ville')->operators(['contains']),
-            // Filter::inputText('pays')->operators(['contains']),
+      
         ];
     }
 
@@ -203,39 +220,22 @@ final class AssociesTable extends PowerGridComponent
     public function actions(): array
     {
        return [
-        //    Button::make('edit', 'Edit')
-        //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-        //        ->route('prospect.create', function(\App\Models\Individu $model) {
-        //             return $model->id;
-        //        }),
-
-               
-               
+                     
+            
             Button::add('Afficher')
-                ->bladeComponent('button-show', function(Individu $individu) {
-                    return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
+                ->bladeComponent('button-show', function(Contact $contact) {
+                    return ['route' => route('contact.show', Crypt::encrypt($contact->id)),
                     'tooltip' => "Afficher",
-                    'permission' => Gate::allows('permission', 'afficher-contact'),
-                    
+                    'permission' => Gate::allows('permission', 'afficher-tous-les-contacts'),
                     ];
                 }),
-                
-            Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Individu $individu) {
-                return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
-                'tooltip' => "Modifier",
-                'permission' => Gate::allows('permission', 'modifier-contact'),
-                
-                ];
-            }),
-            
-            Button::add('Retirer')
-            ->bladeComponent('button-delete', function(Individu $individu) {
-                return ['route' => route('contact.deassociate', [intval($this->entite_id), $individu->contact_id] ),
-                'tooltip' => "Retirer",
-                'class' => "dissocier_individu",
-                'permission' => Gate::allows('permission', 'modifier-contact'),
-                
+
+            Button::add('Restaurer')
+            ->bladeComponent('button-unarchive', function(Contact $contact) {
+                return ['route' => route('contact.unarchive', Crypt::encrypt($contact->id)),
+                'tooltip' => "Restaurer",
+                'classunarchive' => "unarchive_contact",
+                'permission' => Gate::allows('permission', 'archiver-tous-les-contacts'),
                 
                 ];
             }),

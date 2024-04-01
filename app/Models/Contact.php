@@ -11,36 +11,7 @@ class Contact extends Model
     use HasFactory;
     protected $guarded =[];
     
-    /**
-     * Retourne l'individu lié au contact
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function individu()
-    {
-        return $this->hasOne(Individu::class);
-    }
-    
-     /**
-     * Retourne l'entité liée au contact
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function entite()
-    {
-        return $this->hasOne(Entite::class);
-    }
-    
-    /**
-     * The typecontacts that belong to the Contact
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function typecontacts(): BelongsToMany
-    {
-        return $this->belongsToMany(Typecontact::class,);
-    }
-
+   
     /**
      * Retourne les infos du contact
      *
@@ -76,4 +47,12 @@ class Contact extends Model
     {
         return $this->hasOne(Fournisseur::class);
     }
+
+    /*
+    * Retourne l'utilisateur lié au contact
+    */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    } 
 }

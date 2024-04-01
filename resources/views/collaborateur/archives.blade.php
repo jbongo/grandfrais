@@ -100,11 +100,9 @@
                             </div>
                         </div>
 
-
                         <div class="table-responsive">
-                            <livewire:collaborateur.individu-archive-table />
+                            <livewire:contact.archive-table :type="'Collaborateur'" />
                         </div>
-
 
 
 

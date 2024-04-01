@@ -15,16 +15,21 @@ class CreateContactsTable extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            // Entite ou individu
-            $table->string("type")->nullable();
             // Le user qui a crée le contact
             $table->integer('user_id')->unsigned()->nullable();
-            // Le commercial qui suit le contact
-            $table->integer('commercial_id')->unsigned()->nullable();
-            // société lié au contact
-            $table->integer('societe_id')->unsigned()->nullable();
-            // 'Personne physique', 'couple', 'Personne morale', 'groupe', 'autre'
-            $table->string("nature")->nullable();
+            $table->string("type")->nullable();
+            $table->string('civilite')->nullable();
+            $table->string("nom")->nullable();
+            $table->string("prenom")->nullable();
+            $table->string("entreprise")->nullable();
+            $table->string("email")->nullable();
+            $table->string('indicatif_1')->nullable();
+            $table->string('indicatif_2')->nullable();
+            $table->string('telephone_1')->nullable();
+            $table->string('telephone_2')->nullable();
+            $table->string('ville')->nullable();
+            $table->string('quartier')->nullable();
+            $table->text('notes')->nullable();
             $table->boolean("archive")->default(false);
             $table->timestamps();
         });

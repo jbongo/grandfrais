@@ -82,7 +82,7 @@
                         </div>
 
 
-                        <livewire:contact.edit-form :typecontact="'Collaborateur'" :contact="$contact" :cont="$cont"
+                        <livewire:contact.edit-form :type="'Collaborateur'" :contact="$contact" :cont="$cont"
                             :emails="$emails" />
 
                         <style>

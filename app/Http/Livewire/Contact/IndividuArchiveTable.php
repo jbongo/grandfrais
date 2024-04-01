@@ -237,14 +237,7 @@ final class IndividuArchiveTable extends PowerGridComponent
     public function actions(): array
     {
        return [
-        //    Button::make('edit', 'Edit')
-        //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-        //        ->route('prospect.create', function(\App\Models\Individu $model) {
-        //             return $model->id;
-        //        }),
-
-               
-               
+                      
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(Individu $individu) {
                     return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),

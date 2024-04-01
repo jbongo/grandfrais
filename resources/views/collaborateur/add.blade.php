@@ -81,7 +81,7 @@
                         </div>
 
 
-                        <livewire:contact.add-form :typecontact="'Collaborateur'" />
+                        <livewire:contact.add-form :type="'Collaborateur'" />
 
 
 

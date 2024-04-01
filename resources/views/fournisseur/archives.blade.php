@@ -100,37 +100,8 @@
                             </div>
                         </div>
 
-                        <ul class="nav nav-tabs nav-bordered mb-3">
-                            <li class="nav-item">
-                                <a href="#entite" data-bs-toggle="tab" aria-expanded="true" class="nav-link active ">
-                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Personnes morales</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#individu" data-bs-toggle="tab" aria-expanded="false" class="nav-link ">
-                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Individus</span>
-                                </a>
-                            </li>
-
-
-                        </ul>
-
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="entite">
-                                <div class="table-responsive">
-                                    <livewire:fournisseur.entite-archive-table />
-                                </div>
-
-                            </div>
-                            <div class="tab-pane show " id="individu">
-                                <div class="table-responsive">
-                                    <livewire:fournisseur.individu-archive-table />
-                                </div>
-                            </div>
-
-
+                        <div class="table-responsive">
+                            <livewire:contact.archive-table :type="'Fournisseur'" />
                         </div>
 
                     </div> <!-- end card-body-->
