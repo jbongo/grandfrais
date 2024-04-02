@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('postes', function (Blueprint $table) {
+        Schema::create('caisses', function (Blueprint $table) {
             $table->id();
-            $table->string("nom")->nullable();
-            $table->boolean("archive")->default(false);            
-            $table->boolean("est_interne")->default(false);            
+            $table->string('nom')->nullable();
+            $table->string('description')->nullable();
+            $table->double('solde')->nullable();            
+            $table->string('statut')->nullable();
+            $table->boolean('archive')->default(false);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('postes');
+        Schema::dropIfExists('caisses');
     }
 };

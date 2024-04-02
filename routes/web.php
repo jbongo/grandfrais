@@ -25,6 +25,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\AchatController;
 use App\Http\Controllers\VenteController;
 use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\TypedepenseController;
 use Illuminate\Support\Facades\Route;
 
@@ -313,9 +314,7 @@ Route::controller(VenteController::class)->group(function () {
     Route::get('/ventes', 'index')->name('vente.index')->middleware(['auth']);
     Route::get('/ventes/archives', 'archives')->name('vente.archives')->middleware(['auth']);
     Route::post('/ventes/ajouter', 'store')->name('vente.store')->middleware(['auth']);
-    Route::get('/ventes/ajouter', 'create')->name('vente.create')->middleware(['auth']);
     Route::get('/ventes/show/{venteId}', 'show')->name('vente.show')->middleware(['auth']);
-    Route::get('/ventes/modifier/{venteId}', 'edit')->name('vente.edit')->middleware(['auth']);
     Route::post('/ventes/modifier/{venteId}', 'update')->name('vente.update')->middleware(['auth']);
     Route::post('/ventes/archiver/{venteId}', 'archive')->name('vente.archive')->middleware(['auth']);
     Route::post('/ventes/desarchiver/{venteId}', 'unarchive')->name('vente.unarchive')->middleware(['auth']);
@@ -330,6 +329,17 @@ Route::controller(DepenseController::class)->group(function () {
     Route::post('/depenses/modifier/{depenseId}', 'update')->name('depense.update')->middleware(['auth']);
     Route::post('/depenses/archiver/{depenseId}', 'archiver')->name('depense.archive')->middleware(['auth']);
     Route::post('/depenses/desarchiver/{depenseId}', 'desarchiver')->name('depense.unarchive')->middleware(['auth']);
+});
+
+// Caisse
+Route::controller(CaisseController::class)->group(function () {
+    Route::get('/caisses', 'index')->name('caisse.index')->middleware(['auth']);
+    Route::get('/caisses/archives', 'archives')->name('caisse.archives')->middleware(['auth']);
+    Route::post('/caisses/ajouter', 'store')->name('caisse.store')->middleware(['auth']);
+    Route::get('/caisses/show/{caisseId}', 'show')->name('caisse.show')->middleware(['auth']);
+    Route::post('/caisses/modifier/{caisseId}', 'update')->name('caisse.update')->middleware(['auth']);
+    Route::post('/caisses/archiver/{caisseId}', 'archive')->name('caisse.archive')->middleware(['auth']);
+    Route::post('/caisses/desarchiver/{caisseId}', 'unarchive')->name('caisse.unarchive')->middleware(['auth']);
 });
 
 

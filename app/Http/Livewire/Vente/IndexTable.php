@@ -193,10 +193,10 @@ final class IndexTable extends PowerGridComponent
        return [
             Button::add('Modifier')
             ->bladeComponent('button-edit-vente-modal', function(Vente $vente) {
-                return ['route' => route('vente.edit', Crypt::encrypt($vente->id)),
+                return [
                 'tooltip' => "Modifier",
                 'vente' => $vente,
-                'href' => route('vente.edit', Crypt::encrypt($vente->id)),
+                'href' => route('vente.update', Crypt::encrypt($vente->id)),
                 'datevente' => $vente->date_vente,
                 'permission' => Gate::allows('permission', 'modifier-vente'),
                 

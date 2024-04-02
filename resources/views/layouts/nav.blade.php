@@ -139,6 +139,16 @@
             </li>
         @endcan
 
+        @can('permission', 'afficher-caisse')
+            <li class="side-nav-item {{ $li_depense }}">
+                <a href="{{ route('caisse.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class=" uil-usd-square"></i>
+                    <span> Caisse </span>
+                </a>
+            </li>
+        @endcan
+
         @can('permission', 'afficher-utilisateur')
             <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
                 <a data-bs-toggle="collapse" href="#utilisateurs" aria-expanded="false" aria-controls="utilisateurs"
@@ -258,8 +268,10 @@
             </li>
         @endcan
 
+
+
         
-        @can('permission', 'afficher-agenda')
+        {{-- @can('permission', 'afficher-agenda')
             <li class="side-nav-item {{ $li_agenda }}">
                 <a href="{{ route('agenda.listing') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                     class="side-nav-link">
@@ -267,7 +279,7 @@
                     <span> Agenda </span>
                 </a>
             </li>
-        @endcan
+        @endcan --}}
 
         @can('permission', 'afficher-parametre')
             <li
