@@ -149,32 +149,7 @@
 @section('script')
 
 
-    {{-- Gestion de stock Ajout déclinaison --}}
-    <script>
-        var gerer_stock = @json($produit->gerer_stock);
 
-        if (gerer_stock == false) {
-            $(".div_stock").hide();
-            $(".div_stock_decli").hide();
-        }
-        $('#gerer_stock').change(function() {
-            if ($("#gerer_stock").is(":checked")) {
-                $(".div_stock").slideDown();
-            } else {
-                $(".div_stock").slideUp();
-
-            }
-
-        });
-
-        $('#gerer_stock_decli').change(function() {
-            if ($("#gerer_stock_decli").is(":checked")) {
-                $(".div_stock_decli").slideDown();
-            } else {
-                $(".div_stock_decli").slideUp();
-            }
-        });
-    </script>
 
 
     <script src="https://cdn.tiny.cloud/1/ieugu2pgq0vkrn7vrhnp69zprqpp5xfwh9iewe7v24gtdj8f/tinymce/6/tinymce.min.js"

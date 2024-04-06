@@ -67,9 +67,14 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             @can('permission', 'ajouter-vente')
-                                <div class="d-flex justify-content-start">
+                                {{-- <div class="d-flex justify-content-start">
                                     <a class="btn btn-primary mb-2" href="#add-vente" class="btn btn-primary mb-2" data-bs-toggle="modal"
                                     data-bs-target="#standard-modal-vente">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter vente
+                                    </a>                             
+                                </div> --}}
+                                <div class="d-flex justify-content-start">
+                                    <a class="btn btn-primary mb-2" href="{{ route('vente.create')}}" class="btn btn-primary mb-2" >
                                         <i class="mdi mdi-plus-circle me-2"></i> Ajouter vente
                                     </a>                             
                                 </div>
@@ -78,7 +83,7 @@
                             @if(Auth::user()->is_admin)
                             
                                 <div class="">
-                                    <strong>Montant total des ventes :<span class="badge bg-danger text-white font-bold px-2 fs-5">  {{ $montant_total_ventes }} €</span></strong>                  
+                                    <strong>Montant total des ventes :<span class="badge bg-danger text-white font-bold px-2 fs-5">  {{ $montant_total_ventes }} FCFA</span></strong>                  
                                 </div>
                             @endif
                           

@@ -22,9 +22,7 @@ class EditForm extends Component
     public $marque;
     public $marques;
     public $a_declinaison;
-    public $prix_vente_ht;
     public $prix_vente_ttc;
-    public $prix_achat_ht;
     public $prix_achat_ttc;
 
     
@@ -50,14 +48,15 @@ class EditForm extends Component
         $this->fiche_technique = $this->produit->fiche_technique;
         $this->a_declinaison = $this->produit->a_declinaison;
         $this->marque = $this->produit->marque_id;
-        $this->prix_vente_ht = $this->produit->prix_vente_ht;
         $this->prix_vente_ttc = $this->produit->prix_vente_ttc;
-        $this->prix_achat_ht = $this->produit->prix_achat_ht;
         $this->prix_achat_ttc = $this->produit->prix_achat_ttc;
         
-        $this->quantite =  $this->produit->gerer_stock == true ? $this->produit->quantite_stock : null;
+        $this->quantite = $this->produit->quantite_stock ;
+        $this->unite_mesure = $this->produit->unite_mesure_stock ;
+        
+
         $this->gerer_stock = $this->produit->gerer_stock;
-        $this->seuil_alerte_stock =  $this->produit->gerer_stock == true ? $this->produit->seuil_alerte_stock : null;
+        $this->seuil_alerte_stock = $this->produit->seuil_alerte_stock ;
     
     }
     
@@ -77,10 +76,7 @@ class EditForm extends Component
 
         $require = [
             'type' => 'required',
-            'nature' => 'required',
-            'prix_vente_ht' => 'required',
             'prix_vente_ttc' => 'required',                
-            'fiche_technique' => 'file:pdf'
         ];
         
        
@@ -92,16 +88,16 @@ class EditForm extends Component
         }
         
         
-        if($this->reference == $this->produit->reference){
+        // if($this->reference == $this->produit->reference){
             
-            $require = array_merge($require,['reference' => 'required|string']);           
+        //     $require = array_merge($require,['reference' => 'required|string']);           
            
-        }
-        else{
+        // }
+        // else{
 
-            $require = array_merge($require,['reference' => 'required|string|unique:produits']);
+        //     $require = array_merge($require,['reference' => 'required|string|unique:produits']);
         
-        }
+        // }
         
         
 // dd($require);

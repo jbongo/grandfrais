@@ -69,11 +69,11 @@ class ProduitController extends Controller
             "description" => $request->description,
    
             "user_id" => Auth::user()->id,
-            "marque_id" => $request->marque,
-            "prix_vente_ht" => $request->prix_vente_ht,
+            // "marque_id" => $request->marque,
+            // "prix_vente_ht" => $request->prix_vente_ht,
             "prix_vente_ttc" => $request->prix_vente_ttc,
 
-            "prix_achat_ht" => $request->prix_achat_ht,
+            // "prix_achat_ht" => $request->prix_achat_ht,
             "prix_achat_ttc" => $request->prix_achat_ttc,
             
             "unite_mesure_stock" => $request->unite_mesure,
@@ -89,13 +89,13 @@ class ProduitController extends Controller
         
         
       
-        if($request->hasFile('fiche_technique')){
+        // if($request->hasFile('fiche_technique')){
          
-            $filename = 'fiche_technique_'.$produit->id.'.pdf';
-            $produit->fiche_technique = $filename;
-            $request->fiche_technique->storeAs('public/fiche_technique',$filename);
-            $produit->update();            
-        }
+        //     $filename = 'fiche_technique_'.$produit->id.'.pdf';
+        //     $produit->fiche_technique = $filename;
+        //     $request->fiche_technique->storeAs('public/fiche_technique',$filename);
+        //     $produit->update();            
+        // }
         
         
         if($request->images){
@@ -141,13 +141,14 @@ class ProduitController extends Controller
     {
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
            
+        // dd($request->all());
         $produit->nom = $request->nom;
         $produit->description = $request->description;
         $produit->nature = $request->nature;
         $produit->marque_id = $request->marque;
-        $produit->prix_vente_ht = $request->prix_vente_ht;
+        // $produit->prix_vente_ht = $request->prix_vente_ht;
         $produit->prix_vente_ttc = $request->prix_vente_ttc;
-        $produit->prix_achat_ht = $request->prix_achat_ht;
+        // $produit->prix_achat_ht = $request->prix_achat_ht;
         $produit->prix_achat_ttc = $request->prix_achat_ttc;
 
         $produit->unite_mesure_stock = $request->unite_mesure;

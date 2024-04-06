@@ -66,7 +66,6 @@
 
                         <!-- end row-->
                         <div class="row">
-
                             <div class="col-6">
                                 @if (session('message'))
                                     <div class="alert alert-success text-secondary alert-dismissible ">
@@ -75,26 +74,24 @@
                                         <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
                                     </div>
                                 @endif
-
-
                             </div>
                         </div>
 
                         <livewire:produit.add-form :categories="$categories" :marques="$marques">
 
-                            <style>
-                                .select2-container .select2-selection--single {
-                                    height: calc(1.69em + 0.9rem + 2px);
-                                }
+                        <style>
+                            .select2-container .select2-selection--single {
+                                height: calc(1.69em + 0.9rem + 2px);
+                            }
 
-                                .card-body {
-                                    padding: 0.0rem 0.0rem !important;
-                                }
+                            .card-body {
+                                padding: 0.0rem 0.0rem !important;
+                            }
 
-                                .modal-footer {
-                                    border-top: 0px solid #ffffff;
-                                }
-                            </style>
+                            .modal-footer {
+                                border-top: 0px solid #ffffff;
+                            }
+                        </style>
 
 
 
@@ -110,20 +107,7 @@
 
 @section('script')
 
-    {{-- Gestion de stock --}}
-    <script>
-        $(".div_stock").hide();
 
-        $('#gerer_stock').change(function() {
-            if ($("#gerer_stock").is(":checked")) {
-                $(".div_stock").slideDown();
-            } else {
-                $(".div_stock").slideUp();
-
-            }
-
-        });
-    </script>
 
     <script src="https://cdn.tiny.cloud/1/ieugu2pgq0vkrn7vrhnp69zprqpp5xfwh9iewe7v24gtdj8f/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>

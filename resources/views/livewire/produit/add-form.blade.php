@@ -12,7 +12,7 @@
                         <span class="d-none d-md-block">Essentiel</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#prix-tab" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
                         <i class="mdi mdi-account-circle d-md-none d-block"></i>
                         <span class="d-none d-md-block">Prix</span>
@@ -24,7 +24,7 @@
                         <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                         <span class="d-none d-md-block">Stock</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
 
 
@@ -32,14 +32,14 @@
                 <div class="tab-pane show active" id="essentiel-tab">
                     @include('produit.components.add_essentiel')
                 </div>
-                <div class="tab-pane " id="prix-tab">
+                {{-- <div class="tab-pane " id="prix-tab">
                     @include('produit.components.add_prix')
 
                 </div>
 
                 <div class="tab-pane" id="stock-tab">
                     @include('produit.components.add_stock')
-                </div>
+                </div> --}}
             </div>
 
 

@@ -313,6 +313,7 @@ Route::controller(AchatController::class)->group(function () {
 Route::controller(VenteController::class)->group(function () {
     Route::get('/ventes', 'index')->name('vente.index')->middleware(['auth']);
     Route::get('/ventes/archives', 'archives')->name('vente.archives')->middleware(['auth']);
+    Route::get('/vente/ajouter', 'create')->name('vente.create')->middleware(['auth']);
     Route::post('/ventes/ajouter', 'store')->name('vente.store')->middleware(['auth']);
     Route::get('/ventes/show/{venteId}', 'show')->name('vente.show')->middleware(['auth']);
     Route::post('/ventes/modifier/{venteId}', 'update')->name('vente.update')->middleware(['auth']);

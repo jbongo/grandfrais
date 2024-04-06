@@ -65,12 +65,10 @@
                                         <span class="fst-italic">non géré</span>
                                     @endif
 
-
                                 </td>
 
 
                                 <td>
-
 
                                     <a data-href="{{ route('produit_declinaison.update', Crypt::encrypt($proddecli->id)) }}"
                                         data-prix_vente_ht="{{ $proddecli->prix_vente_ht }}"

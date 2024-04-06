@@ -32,7 +32,8 @@ class VenteController extends Controller
      */
     public function create()
     {
-        //
+        $produits = Produit::where('archive', false)->get();
+        return view('vente.add', compact('produits'));
     }
 
     /**

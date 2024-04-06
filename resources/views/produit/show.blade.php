@@ -173,7 +173,7 @@
                                                     <!-- Product description -->
                                                     <div class="mt-4">
                                                         <h6 class="font-14">Prix de vente HT</h6>
-                                                        <h4> {{ $produit->prix_vente_ht }} € </h4>
+                                                        <h4> {{ $produit->prix_vente_ht }} FCFA </h4>
                                                     </div>
 
 
