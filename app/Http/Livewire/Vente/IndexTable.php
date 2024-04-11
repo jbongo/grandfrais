@@ -105,18 +105,23 @@ final class IndexTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
+            ->addColumn('numero', function (Vente $model) {
+                return '<span class="badge bg-danger text-white font-bold py-1 px-2 fs-6">'.$model->numero.'</span>';
+            })
             ->addColumn('date_vente', fn (Vente $model) => Carbon::parse($model->date_vente)->format('d/m/Y')  )
+            ->addColumn('montant', function(Vente $model){
+                return "<span class='badge bg-info text-white font-bold py-1 px-2 fs-6'>".number_format($model->montant, 2, ',', ' ')."</span>";
+            })
 
             ->addColumn('produit', function (Vente $model) {          
-                return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model?->produit()?->nom.'</span>';
+                return  '<span class=" text-primary font-bold py-1 px-2 fs-5">'.$model->description.'</span>';
            
             } )
-            ->addColumn('prix_total')
             ->addColumn('quantite')
-            ->addColumn('unite_mesure', function (Vente $model) {          
-                return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model?->produit()?->unite_mesure.'</span>';
+            // ->addColumn('unite_mesure', function (Vente $model) {          
+            //     return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model?->unite_mesure.'</span>';
            
-            } )
+            // } )
            
             ->addColumn('created_date', function (Vente $model) {          
                 return $model->created_at->format('d/m/Y');
@@ -142,11 +147,12 @@ final class IndexTable extends PowerGridComponent
     {
         $colums =  [
             // Column::make('Id', 'id'),
+            Column::make('Numéro', 'numero')->searchable()->sortable(),
             Column::make('Date vente', 'date_vente')->searchable()->sortable(),
+            Column::make('Montant Total', 'montant')->searchable()->sortable(),
             Column::make('Produit', 'produit')->searchable()->sortable(),
-            Column::make('Prix total', 'prix_total')->searchable()->sortable(),
-            Column::make('Quantité', 'quantite')->searchable()->sortable(),
-            Column::make('Unité de mesure', 'unite_mesure')->searchable()->sortable(),
+            // Column::make('Quantité', 'quantite')->searchable()->sortable(),
+            // Column::make('Unité de mesure', 'unite_mesure')->searchable()->sortable(),
 
             Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
             // Column::make('Actions')
@@ -191,13 +197,21 @@ final class IndexTable extends PowerGridComponent
     public function actions(): array
     {
        return [
+            Button::add('Afficher')
+            ->bladeComponent('button-show', function(Vente $vente) {
+                return [
+                'tooltip' => "Afficher",
+                'route' => route('vente.show', Crypt::encrypt($vente->id)),
+                'permission' => Gate::allows('permission', 'afficher-vente'),
+                
+                ];
+            }),
+
             Button::add('Modifier')
-            ->bladeComponent('button-edit-vente-modal', function(Vente $vente) {
+            ->bladeComponent('button-edit', function(Vente $vente) {
                 return [
                 'tooltip' => "Modifier",
-                'vente' => $vente,
-                'href' => route('vente.update', Crypt::encrypt($vente->id)),
-                'datevente' => $vente->date_vente,
+                'route' => route('vente.edit', Crypt::encrypt($vente->id)),
                 'permission' => Gate::allows('permission', 'modifier-vente'),
                 
                 ];
@@ -209,7 +223,7 @@ final class IndexTable extends PowerGridComponent
                 'tooltip' => "Archiver",
                 'details' => "",
                 'classarchive' => "archive_vente",
-                'permission' => Gate::allows('permission', 'modifier-vente'),
+                'permission' => Gate::allows('permission', 'archiver-vente'),
                 
                 ];
             }),

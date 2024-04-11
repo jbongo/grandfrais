@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Vente;
 use App\Models\Produit;
+use App\Models\ProduitVente;
+use App\Models\Caisse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -41,28 +43,59 @@ class VenteController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'produit_id' => 'required',
-            'quantite' => 'required',
-            'date_vente' => 'required',
-        ]);
+        $params = $request->all();
+        unset($params["date_vente"]) ;
+        unset($params["_token"]) ;
         
-        $produit = Produit::find($request->produit_id);
-        $prix = $produit->prix_vente_ttc;
-        $prix_total = $prix * $request->quantite;
-
         
-
+        $ligneVentes = array_chunk($params, 3);
 
         $vente = new Vente();
-        $vente->produit_id = $request->produit_id;
+         
         $vente->user_id = Auth::user()->id;
-        $vente->quantite = $request->quantite;
-        $vente->prix_unitaire = $prix;
-        $vente->prix_total = $prix_total;
+        $vente->numero = Vente::count() + 1;
         $vente->date_vente = $request->date_vente;
-
+       
         $vente->save();
+
+        $prix_global = 0;
+        $description = "";
+        foreach ($ligneVentes as $ligne) {
+            
+            // 0 => produit_id, 1 => prix_unitaire, 2 => quantite
+
+            $produit = Produit::find($ligne[0]);
+            $prix = $ligne[1];
+            $quantite = $ligne[2];
+            $prix_total = $prix * $quantite;
+
+            $prix_unitaire_modifie = $produit->prix_vente_ttc != $prix ? true : false;
+
+            $prix_global += $prix_total;
+            $description_prix_total = $prix_unitaire_modifie == false ? $prix_total. " €" : "<span style='color:red;'>" . $prix_total . " €</span>";
+            $description .= $produit->nom . " : ". $description_prix_total . "  |  ";
+
+            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total]);
+
+             // MAJ Stock
+
+             $produit->quantite_stock -= $quantite;
+
+             $produit->save();
+ 
+             // MAJ Caisse
+             $caisse = Caisse::where('est_principale', true)->first();
+             if($caisse != null){
+                 $caisse->solde += $prix_total;
+                 $caisse->save();
+             }
+
+        }
+
+        $vente->montant = $prix_global;
+        $vente->description = $description;     
+        $vente->save();
+
 
         return redirect()->route('vente.index')->with('ok', 'Vente enregistrée avec succès');
     }
@@ -70,17 +103,21 @@ class VenteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vente $vente)
+    public function show($vente)
     {
-        //
+
+        $vente = Vente::where('id', Crypt::decrypt($vente))->first();
+        return view('vente.show', compact('vente'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Vente $vente)
+    public function edit($vente_id)
     {
-        //
+        $vente = Vente::where('id', Crypt::decrypt($vente_id))->first();
+        $produits = Produit::where('archive', false)->get();
+        return view('vente.edit', compact('vente', 'produits'));
     }
 
     /**
@@ -89,32 +126,68 @@ class VenteController extends Controller
     public function update(Request $request, $vente_id)
     {
 
-     
+        $vente = Vente::where('id', Crypt::decrypt($vente_id))->first();
+
+        $params = $request->all();
+        unset($params["date_vente"]) ;
+        unset($params["_token"]) ;
         
-        $request->validate([
-            'produit_id' => 'required',
-            'quantite' => 'required',
-            'date_vente' => 'required',
-        ]);
         
-        $produit = Produit::find($request->produit_id);
-      
+        $ligneVentes = array_chunk($params, 4);
 
-        $vente = vente::where('id', Crypt::decrypt($vente_id))->first();
+        $vente->date_vente = $request->date_vente;
+        $vente->save();
+
+        $prix_global = 0;
+        $description = "";
+
+       
 
 
-        if($vente->produit_id != $request->produit_id){
-            $prix = $produit->prix_vente_ttc;
-        }else{
-            $prix = $vente->prix_unitaire;
+        foreach ($ligneVentes as $ligne) {
+            
+            // 0 => produit_id, 1 => prix_unitaire, 2 => quantite , 3 => pivot_id
+
+
+            $pivot = ProduitVente::find($ligne[3]);
+           
+            $vente->produits()->detach($pivot->produit_id);
+
+
+            $produit = Produit::find($ligne[0]);
+            $prix = $ligne[1];
+            $quantite = $ligne[2];
+            $prix_total = $prix * $quantite;
+            
+            $prix_unitaire_modifie = $produit->prix_vente_ttc != $prix ? true : false;
+
+            $prix_global += $prix_total;
+            $description_prix_total = $prix_unitaire_modifie == false ? $prix_total. " €" : "<span style='color:red;'>" . $prix_total . " €</span>";
+            $description .= $produit->nom . " : ". $description_prix_total . "  |  ";
+
+
+            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'prix_unitaire_modifie' => $prix_unitaire_modifie]);
+
+            // MAJ Stock
+
+            $produit->quantite_stock = $produit->quantite_stock + $pivot->quantite - $quantite;
+
+            $produit->save();
+
+            // MAJ Caisse
+            $caisse = Caisse::where('est_principale', true)->first();
+            if($caisse != null){
+                $caisse->solde = $caisse->solde - $pivot->prix_total + $prix_total;
+                $caisse->save();
+            }
+
         }
 
-        $vente->produit_id = $request->produit_id;
-        $vente->quantite = $request->quantite;
-        $vente->prix_total = $prix * $vente->quantite;
-        $vente->date_vente = $request->date_vente;
-
+        $vente->montant = $prix_global;
+        $vente->description = $description;     
         $vente->save();
+
+
 
         return redirect()->route('vente.index')->with('ok', 'Vente modifiée avec succès');
     }

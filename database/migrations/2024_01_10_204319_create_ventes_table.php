@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('ventes', function (Blueprint $table) {
             $table->id();
-            $table->integer('produit_id')->nullable();
             $table->integer('client_id')->nullable();
-            $table->integer('user_id')->nullable();
-            $table->integer('quantite')->nullable();
-            $table->double('prix_unitaire')->nullable();
-            $table->double('prix_total')->nullable();
+            $table->integer('numero')->nullable();
+            $table->integer('user_id')->nullable();            
             $table->date('date_vente')->nullable();
+            $table->double('montant')->nullable();
+            $table->text('description')->nullable();
             $table->string('statut')->nullable();
             $table->string('archive')->default(false);
 

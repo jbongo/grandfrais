@@ -97,4 +97,14 @@ class Produit extends Model
         
         return json_encode($valids);    
    }
+
+   /*
+   * Retourne les ventes liés au produit
+   */
+   
+  public function ventes(){
+
+    return $this->belongsToMany(Vente::class);
+  } 
+
 }

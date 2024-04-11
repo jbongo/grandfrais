@@ -107,8 +107,6 @@
 
 @section('script')
 
-
-
     <script src="https://cdn.tiny.cloud/1/ieugu2pgq0vkrn7vrhnp69zprqpp5xfwh9iewe7v24gtdj8f/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
 

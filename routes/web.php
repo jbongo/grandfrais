@@ -316,6 +316,7 @@ Route::controller(VenteController::class)->group(function () {
     Route::get('/vente/ajouter', 'create')->name('vente.create')->middleware(['auth']);
     Route::post('/ventes/ajouter', 'store')->name('vente.store')->middleware(['auth']);
     Route::get('/ventes/show/{venteId}', 'show')->name('vente.show')->middleware(['auth']);
+    Route::get('/ventes/modifier/{venteId}', 'edit')->name('vente.edit')->middleware(['auth']);
     Route::post('/ventes/modifier/{venteId}', 'update')->name('vente.update')->middleware(['auth']);
     Route::post('/ventes/archiver/{venteId}', 'archive')->name('vente.archive')->middleware(['auth']);
     Route::post('/ventes/desarchiver/{venteId}', 'unarchive')->name('vente.unarchive')->middleware(['auth']);

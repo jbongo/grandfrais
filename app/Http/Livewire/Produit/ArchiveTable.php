@@ -158,13 +158,6 @@ final class ArchiveTable extends PowerGridComponent
                 
               
                 return $model->prix_vente_ht;
-            })
-            ->addColumn('stock',function (Produit $model){
-                
-                if($model->stock){
-                    return $model->stock->quantite;
-                }
-                return "non géré";
             });
          
     }
@@ -194,7 +187,7 @@ final class ArchiveTable extends PowerGridComponent
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Catégories', 'categorie')->sortable()->searchable(),
             Column::make('Prix de vente', 'prix_vente_ttc')->sortable()->searchable(),
-            Column::make('Stock', 'stock')->sortable()->searchable(),
+           
 
 
         ];

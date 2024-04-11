@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->double('solde')->nullable();            
             $table->string('statut')->nullable();
+            $table->boolean('est_principale')->default(false);
             $table->boolean('archive')->default(false);
             $table->timestamps();
         });

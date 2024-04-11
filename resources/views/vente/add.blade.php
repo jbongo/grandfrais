@@ -127,13 +127,13 @@
 
                                     
 
-                                    <div class="col-6 ">
+                                    <div class="col-sm-6 col-xl-3 ">
                                         <div class="mb-3 ">
                                             <label for="date_vente" class="form-label">
                                                 Date de la vente
                                             </label>
                                             <input type="date" id="date_vente" name="date_vente"
-                                                value="{{ old('date_vente') ? old('date_vente') : '' }}"
+                                                value="{{ old('date_vente') ? old('date_vente') : date('Y-m-d') }}"
                                                 class="form-control">
 
                                             @if ($errors->has('date_vente'))
@@ -157,13 +157,13 @@
             </div> <!-- end col -->
 
 
-
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-
-            </div>
+           
+             
+            <button type="submit"
+                style="position: fixed;bottom: 10px; margin: 0;  left: 50%; z-index:1 ; width:200px; height:50px;"
+                class="btn btn-dark btn-flat btn-addon btn-lg">Enregistrer
+            </button>
+           
             </form>
 
         </div>
@@ -219,20 +219,6 @@
 
 
 
-    {{-- Associer individu --}}
-    <script>
-        
-    </script>
-
-    <script>
-        $('#produit_id').change(function(e) {
-            var prix = e.currentTarget.options[e.currentTarget.selectedIndex].getAttribute('prix');
-
-            $('#montant_ttc').val(prix);
-
-        });
-    </script>
-
     <script>
         $(document).ready(function() {
             var y = 1;
@@ -249,15 +235,13 @@
                                 <label for="produit${y}" class="form-label">
                                     Produits
                                 </label>
-                                <select name="produit${y}" id="produit${y}" class=" form-control select2"
+                                <select name="produit${y}" id="produit${y}" class=" select_produit form-control select2" required
                                     data-toggle="select2">
                                     <option value=""></option>
                                     @foreach ($produits as $produit)
                                         <option value="{{ $produit->id }}"
-                                            prix="{{ $produit->prix_vente_ttc }}">
-                                            {{ $produit->nom }} -
-                                            {{ number_format($produit->prix_vente_ttc, 2, ',', ' ') }}
-                                            FCFA
+                                            prix="{{ $produit->prix_vente_ttc }}" unite_mesure="{{ $produit->unite_mesure }}" >
+                                            {{ $produit->nom }} 
                                         </option>
                                     @endforeach
                                 </select>                                
@@ -272,7 +256,7 @@
                                 Prix <span class="text-danger">*</span>
                                 </label>
                                 <input type="number" id="prix${y}" name="prix${y}" min="0" step="1" value=""
-                                    class="form-control" required>                                
+                                    class="form-control prix_ttc" required>                                
                             </div>
                         </div>
 
@@ -280,7 +264,7 @@
                         <div class="col-md-3 col-xl-2 ">
                             <div class="mb-3 ">
                                 <label for="quantite${y}" class="form-label">
-                                Quantite Ou Kilo <span class="text-danger">*</span>
+                                <span class="libelle_quantite"></span> <span class="text-danger">*</span>
                                 </label>
                                 <input type="number" id="quantite${y}" name="quantite${y}" min="0" step="0.01"  value=""                                 
                                     class="form-control" required>
@@ -300,10 +284,6 @@
             });
 
 
-            // $('.produit-vendu').on("click", ".supprimer_charge", function(e) {
-            //     e.preventDefault();
-            //     $(this).parent().parent().parent().remove();
-            // });
 
             $(".produit-vendu").on("click", ".supprimer_produit", function(e) {
                 e.preventDefault();
@@ -315,4 +295,35 @@
 
         });
     </script>
+
+    
+    <script>
+        var produits = @json($produits);
+        var tab_produits = [];
+        
+        
+        produits.forEach(element => {
+            tab_produits[element.id] = element;
+        });
+            
+     
+        //    Lorsqu'on change le produit
+        
+        $(document).on('change', '.select_produit', function() { 
+            var id = $(this).val();
+            var prix_ttc = tab_produits[id].prix_vente_ttc;
+            
+            var unite_mesure = tab_produits[id].unite_mesure_stock;
+            var text = unite_mesure == "Kilo" ? "Nombre de kilos" : "Quantité";
+            $(this).parent().parent().parent().find('.libelle_quantite').text(text );     
+            console.log(tab_produits);       
+      
+            console.log( $(this).parent().parent());
+            $(this).parent().parent().parent().find('.prix_ttc').val(prix_ttc);
+          
+        });
+        
+    </script>
+
+   
 @endsection

@@ -70,7 +70,7 @@
                             <div class="d-flex justify-content-end">
                                 @can('permission', 'archiver-vente')
                                     <a href="{{ route('vente.index') }}" class="btn btn-success mb-2">
-                                        <i class="mdi mdi-archive me-2"></i> Ventes desarchivées
+                                        <i class="mdi mdi-archive me-2"></i> Ventes 
                                     </a>
                                 @endcan
                             </div>
@@ -217,7 +217,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Désarchivée la vente',
+                    title: 'Restaurer la vente',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,

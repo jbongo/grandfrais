@@ -179,8 +179,11 @@ final class indexTable extends PowerGridComponent
             })
             ->addColumn('stock',function (Produit $model){
                 
-                if($model->gerer_stock){
-                    return $model->quantite_stock;
+                if($model->quantite_stock <= 0 ){
+                    return '<span class="badge bg-danger fs-5">Rupture de stock</span>';
+                }
+                else{
+                    return '<span class="badge bg-success fs-5">'.$model->quantite_stock.' '.$model->unite_mesure_stock. '</span>';
                 }
                 return "non géré";
             });
