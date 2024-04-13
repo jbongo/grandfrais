@@ -203,6 +203,7 @@ final class ArchiveTable extends PowerGridComponent
                 'datedepense' => $depense->date_depense,
                 'details' => $depense->details,
                 'montant' => $depense->montant,
+                'caisse_id' => $depense->caisse_id,
                 'href' => route('depense.update', Crypt::encrypt($depense->id)),
                 'permission' => Gate::allows('permission', 'modifier-depense'),
                 

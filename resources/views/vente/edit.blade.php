@@ -326,6 +326,8 @@
                                
                             </div>
                         </div>
+                        <input type="hidden" name="pivot_id${y}" value="">
+
                         <div class="col-md-1 col-xl-1 mb-3 mt-3"> <label class="form-label" for="">&nbsp;</label> <a href="#" class="supprimer_produit btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></div></br>
 
                         </div>

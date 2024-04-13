@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Depense;
 use App\Models\Typedepense;
+use App\Models\Caisse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
@@ -15,7 +16,9 @@ class DepenseController extends Controller
     public function index()
     {
         $typedepenses = Typedepense::where('archive', false)->get();
-        return view('depense.index', compact('typedepenses'));
+        $caisses = Caisse::where('archive', false)->get();
+
+        return view('depense.index', compact('typedepenses', 'caisses'));
     }
 
   
@@ -38,10 +41,16 @@ class DepenseController extends Controller
             $depense = new Depense();
             $depense->user_id = auth()->user()->id;
             $depense->typedepense_id = $request->typedepense_id;
+            $depense->caisse_id = $request->caisse_id;
             $depense->details = $request->details;
             $depense->montant = $request->montant;
             $depense->date_depense = $request->date_depense;
             $depense->save();
+
+            // MAJ CAISSE
+            $caisse = Caisse::find($request->caisse_id);
+            $caisse->solde = $caisse->solde - $request->montant;
+            $caisse->update();
     
             return redirect()->route('depense.index')->with('success', 'Dépense ajoutée avec succès');
     }
@@ -62,6 +71,9 @@ class DepenseController extends Controller
         //
     }
 
+
+
+
     /**
      * Update the specified resource in storage.
      */
@@ -71,9 +83,34 @@ class DepenseController extends Controller
         $depense->details = $request->details;
         $depense->typedepense_id = $request->typedepense_id;
 
+        $caisse_id = $depense->caisse_id;
+        $ancien_montant = $depense->montant;
+
+        $depense->caisse_id = $request->caisse_id;
+
+
         $depense->montant = $request->montant;
         $depense->date_depense = $request->date_depense;
         $depense->save();
+
+        
+        // MAJ CAISSE
+        if($caisse_id != $depense->caisse_id){
+            $nouvelle_caisse = Caisse::find($request->caisse_id);
+            $ancienne_caisse = Caisse::find($caisse_id);
+            $nouvelle_caisse->solde = $nouvelle_caisse->solde - $request->montant;
+            $ancienne_caisse->solde = $ancienne_caisse->solde + $ancien_montant;
+         
+            $nouvelle_caisse->update();
+            $ancienne_caisse->update();
+
+        }else{
+            $caisse = Caisse::find($request->caisse_id);
+            $caisse->solde = $caisse->solde + $ancien_montant - $request->montant;
+            $caisse->update();
+
+        }
+
 
         return redirect()->route('depense.index')->with('success', 'Dépense modifiée avec succès');
     }

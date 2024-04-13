@@ -160,7 +160,7 @@
                                                 Type de dépense <span class="text-danger">*</span>
                                             </label>
 
-                                            <select name="typedepense_id" id="typedepense_id"  class="select2 form-control select2-multiplex" data-toggle="select2" multiple="multiple" data-placeholder=" ...">
+                                            <select name="typedepense_id" id="typedepense_id"  class=" form-select " >
                                               
                                                 @foreach ($typedepenses as $typedepense)
                                                     <option value="{{ $typedepense->id }}">{{ $typedepense->type }}
@@ -198,7 +198,31 @@
                                                     <strong>{{ $errors->first('details') }}</strong>
                                                 </div>
                                             @endif
-                                        </div>                 
+                                        </div>       
+                                        
+                                        <div class="mb-3">
+                                            <label for="caisse_id" class="form-label">
+                                                Montant Déduis de : <span class="text-danger">*</span>
+                                            </label>
+
+                                            <select name="caisse_id" id="caisse_id"  class="select2 form-select">
+                                              
+                                                @foreach ($caisses as $caisse)
+                                                    <option value="{{ $caisse->id }}">{{ $caisse->nom }}
+                                                @endforeach
+                                            </select>
+
+                                          
+
+                                            @if ($errors->has('caisse_id'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('caisse_id') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
 
                                     <div class="col-sm-6">
@@ -332,7 +356,31 @@
                                                         <strong>{{ $errors->first('details') }}</strong>
                                                     </div>
                                                 @endif
-                                            </div>                 
+                                            </div>   
+                                            
+                                            <div class="mb-3">
+                                                <label for="edit-caisse_id" class="form-label">
+                                                    Montant Déduis de : <span class="text-danger">*</span>
+                                                </label>
+    
+                                                <select name="caisse_id" id="edit-caisse_id"  class="select2 form-select">
+                                                  
+                                                    @foreach ($caisses as $caisse)
+                                                        <option value="{{ $caisse->id }}">{{ $caisse->nom }}
+                                                    @endforeach
+                                                </select>
+    
+                                              
+    
+                                                @if ($errors->has('caisse_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('caisse_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
     
                                         <div class="col-sm-6">
@@ -422,25 +470,7 @@
         });
     </script>
 
-    {{-- selection du type de depense --}}
-
-    <script>
-        $('.div-entite').hide();
-
-        $('#type').change(function(e) {
-
-            if (e.currentTarget.value == "entité") {
-                $('.div-entite').show();
-                $('.div-individu').hide();
-
-            } else {
-                $('.div-entite').hide();
-                $('.div-individu').show();
-            }
-
-        });
-    </script>
-
+   
 
     {{-- Modification d'un depense --}}
     <script>
@@ -456,6 +486,7 @@
 
             let currentFormAction = that.data('href');
             console.log(currentFormAction);
+            console.log(currentFormAction);
             $('#form-edit-depense').attr('action', currentFormAction);
 
 
@@ -465,14 +496,10 @@
 
 
             let currentType = that.data('typedepense_id');
-            let currentTypeentite = that.data('typeentite');
+            let currentCaisse = that.data('caisse_id');
          
             $('#edit-typedepense_id option[value='+currentType+']').attr('selected', 'selected');
-
-            $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
-
-
-
+            $('#edit-caisse_id option[value='+currentCaisse+']').attr('selected', 'selected');
 
         })
 

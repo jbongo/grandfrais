@@ -135,6 +135,7 @@ class VenteController extends Controller
         
         $ligneVentes = array_chunk($params, 4);
 
+
         $vente->date_vente = $request->date_vente;
         $vente->save();
 
@@ -143,15 +144,18 @@ class VenteController extends Controller
 
        
 
+        // dd($ligneVentes);
 
         foreach ($ligneVentes as $ligne) {
             
             // 0 => produit_id, 1 => prix_unitaire, 2 => quantite , 3 => pivot_id
 
 
-            $pivot = ProduitVente::find($ligne[3]);
-           
-            $vente->produits()->detach($pivot->produit_id);
+            $pivot = $ligne[3] == null ? null : ProduitVente::find($ligne[3]);
+            
+            if($pivot != null){
+                $vente->produits()->detach($pivot->produit_id);
+            }
 
 
             $produit = Produit::find($ligne[0]);
@@ -168,19 +172,32 @@ class VenteController extends Controller
 
             $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'prix_unitaire_modifie' => $prix_unitaire_modifie]);
 
-            // MAJ Stock
-
-            $produit->quantite_stock = $produit->quantite_stock + $pivot->quantite - $quantite;
-
-            $produit->save();
-
-            // MAJ Caisse
             $caisse = Caisse::where('est_principale', true)->first();
-            if($caisse != null){
-                $caisse->solde = $caisse->solde - $pivot->prix_total + $prix_total;
-                $caisse->save();
-            }
 
+            // MAJ Stock
+            if($pivot != null){
+
+                $produit->quantite_stock = $produit->quantite_stock + $pivot->quantite - $quantite;
+                $produit->save();
+
+                // MAJ Caisse
+                if($caisse != null){
+                    $caisse->solde = $caisse->solde - $pivot->prix_total + $prix_total;
+                    $caisse->save();
+                }
+
+            }else{
+                
+                $produit->quantite_stock = $produit->quantite_stock  - $quantite;
+                $produit->save();
+
+                // MAJ Caisse
+                if($caisse != null){
+                    $caisse->solde = $caisse->solde + $prix_total;
+                    $caisse->save();
+                }
+
+            }
         }
 
         $vente->montant = $prix_global;

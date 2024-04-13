@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('details')->nullable();
             $table->double('montant')->nullable();          
             $table->date('date_depense')->nullable();
+            $table->integer('caisse_id')->nullable();
             $table->boolean('archive')->default(false);
             $table->timestamps();
         });
