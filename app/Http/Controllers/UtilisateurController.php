@@ -49,8 +49,8 @@ class UtilisateurController extends Controller
         
         $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();     
         $roles = Role::where('archive', false)->get();
-        $individus = Individu::where('archive', false)->get();
-        return view('utilisateur.add', compact('contactindividus', 'roles', 'individus'));
+        // $individus = Individu::where('archive', false)->get();
+        return view('utilisateur.add', compact('contactindividus', 'roles'));
     }
     
     /**
@@ -64,9 +64,9 @@ class UtilisateurController extends Controller
         $user = User::where('id', Crypt::decrypt($user_id))->first();
      
         $roles = Role::where('archive', false)->get();
-        $individus = Individu::where('archive', false)->get();
+        // $individus = Individu::where('archive', false)->get();
         $infosUser = $user?->infos();
-        return view('utilisateur.edit', compact('user', 'roles', 'individus', 'infosUser'));
+        return view('utilisateur.edit', compact('user', 'roles',  'infosUser'));
     }
     
     

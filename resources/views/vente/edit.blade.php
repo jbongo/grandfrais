@@ -186,7 +186,7 @@
                                                 Date de la vente
                                             </label>
                                             <input type="date" id="date_vente" name="date_vente"
-                                                value="{{ old('date_vente') ? old('date_vente') : date('Y-m-d') }}"
+                                                value="{{ old('date_vente') ? old('date_vente') : $vente->date_vente }}"
                                                 class="form-control">
 
                                             @if ($errors->has('date_vente'))

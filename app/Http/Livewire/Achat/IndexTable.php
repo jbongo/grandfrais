@@ -226,6 +226,7 @@ final class IndexTable extends PowerGridComponent
                 'dateAchat' => $achat->date_achat,
                 'produitId' => $achat->produit_id,
                 'fournisseurId' => $achat->fournisseur_id,
+                'caisseId' => $achat->caisse_id,
                 'quantite' => $achat->quantite,
                 'prixTotal' => $achat->prix_total,
 

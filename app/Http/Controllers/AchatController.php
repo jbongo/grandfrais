@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Achat;
 use App\Models\Produit;
 use App\Models\Contact;
+use App\Models\Transaction;
+use App\Models\Caisse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -18,9 +20,9 @@ class AchatController extends Controller
     {
         $produits = Produit::where('archive', false)->get();
         $contacts = Contact::where([['archive', false], ['type', 'Fournisseur']])->get();
+        $caisses = Caisse::where('archive', false)->get();
 
-
-        return view('achat.index', compact('produits', 'contacts'));
+        return view('achat.index', compact('produits', 'contacts', 'caisses'));
     }
 
     
@@ -48,6 +50,7 @@ class AchatController extends Controller
 
         $achat = new Achat();
         $achat->produit_id = $request->produit_id;
+        $achat->caisse_id = $request->caisse_id;
         $achat->fournisseur_id = $request->fournisseur_id;
         $achat->user_id = Auth::user()->id;
         $achat->quantite = $request->quantite;
@@ -62,25 +65,34 @@ class AchatController extends Controller
         $produit->quantite_stock = $produit->quantite_stock + $quantite;
         $produit->save();
 
+         // MAJ Caisse
+         $caisse = Caisse::where('id', $request->caisse_id)->first();
+         if($caisse != null){
+             $caisse->solde -= $prix_total;
+             $caisse->save();
+         }
+
+
+        // Enregistrer Transaction
+        $data = [
+            'operation' => 'achat',
+            'type' => 'crédit',
+            'date_transaction' => $request->date_achat,
+            'montant' => $prix_total,
+            'description' => "Achat - ".$produit->nom,
+            'caisse_id' => $request->caisse_id,
+            'user_id' => Auth::user()->id,
+            'resource_id' => $achat->id,
+            'solde' => $caisse?->solde,
+        ];
+
+        Transaction::ajouter($data);
+
         return redirect()->route('achat.index')->with('ok', 'Achat effectué ');
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Achat $achat)
-    {
-        
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Achat $achat)
-    {
-        //
-    }
+    
 
     /**
      * Modifier un achat
@@ -98,6 +110,8 @@ class AchatController extends Controller
         $achat = Achat::find(Crypt::decrypt($achat_id));
 
         $ancienne_quantite  = $achat->quantite;
+        $ancien_prix = $achat->prix_total;
+        $ancienne_caisse_id = $achat->caisse_id;
 
         $prix_total = $request->prix_total;
         $quantite = $request->quantite;
@@ -106,6 +120,7 @@ class AchatController extends Controller
       
         $achat->produit_id = $request->produit_id;
         $achat->fournisseur_id = $request->fournisseur_id;
+        $achat->caisse_id = $request->caisse_id;
         $achat->quantite = $request->quantite;
         $achat->prix_unitaire = $prix_unitaire;
         $achat->prix_total = $prix_total;
@@ -117,6 +132,35 @@ class AchatController extends Controller
         $produit = Produit::find($request->produit_id);
         $produit->quantite_stock = $produit->quantite_stock - $ancienne_quantite + $quantite;
         $produit->save();
+
+        // MAJ Caisse
+      
+        $ancienne_caisse = Caisse::where('id', $ancienne_caisse_id)->first();
+        if($ancienne_caisse != null){          
+            $ancienne_caisse->solde += $ancien_prix;
+            $ancienne_caisse->save();
+        }
+
+        $nouvelle_caisse = Caisse::where('id', $request->caisse_id)->first();
+  
+        $nouvelle_caisse->solde -= $prix_total;
+        $nouvelle_caisse->save();
+
+
+        // Enregistrer Transaction
+        $data = [
+            'operation' => 'achat',
+            'type' => 'crédit',
+            'date_transaction' => $request->date_achat,
+            'montant' => $prix_total,
+            'description' => "Modification Achat - ".$produit->nom. " - Quantite : ".$ancienne_quantite." -> ".$quantite." - Prix total: ".$ancien_prix." -> ".$prix_unitaire,
+            'caisse_id' => $request->caisse_id,
+            'user_id' => Auth::user()->id,
+            'resource_id' => $achat->id,
+            'solde' => $nouvelle_caisse?->solde,
+        ];
+        
+        Transaction::ajouter($data);
 
         return redirect()->route('achat.index')->with('ok', 'Achat modifié ');
     }

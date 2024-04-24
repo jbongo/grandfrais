@@ -33,9 +33,9 @@ class ParametreController extends Controller
     public function contact(){
 
         $types = Typecontact::all();
-        $postes = Poste::all();
+      
        
-        return view('parametres.contact.index', compact('types', 'postes'));
+        return view('parametres.contact.index', compact('types', ));
     
     }
     

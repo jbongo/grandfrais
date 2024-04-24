@@ -139,7 +139,7 @@
 
 
                                                     <p class="mb-1">Date de vente:
-                                                        {{$vente->date_vente->format('d/m/Y') }}
+                                                        {{$vente->date_vente?->format('d/m/Y') }}
                                                     </p>
 
 

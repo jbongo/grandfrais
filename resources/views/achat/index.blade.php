@@ -69,7 +69,7 @@
                             @can('permission', 'ajouter-contact')
                                 <div class="d-flex justify-content-start">
                                   
-                                    <a class="btn btn-primary mb-2" href="#standard-modal-achat" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#standard-modal-achat">
+                                    <a class="btn btn-primary add-achat mb-2" href="#standard-modal-achat" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#standard-modal-achat">
                                         <i class="mdi mdi-plus-circle me-2"></i> Ajouter achat
                                     </a>   
                                     
@@ -279,6 +279,27 @@
                                                     </div>
                                                 @endif
                                             </div>
+
+                                            <div class=" mb-3">
+                                                <label for="caisse_id" class="form-label">
+                                                    Déduis de la caisse :  
+                                                </label>
+                                                <select name="caisse_id" id="caisse_id" class=" form-control select2"
+                                                    data-toggle="select2" >
+                                                   
+                                                    @foreach ($caisses as $caisse)
+                                                       <option value="{{ $caisse->id }}">{{ $caisse->nom }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('caisse_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('caisse_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
     
@@ -429,6 +450,28 @@
                                                     </div>
                                                 @endif
                                             </div>
+
+                                            <div class=" mb-3">
+                                                <label for="edit_caisse_id" class="form-label">
+                                                    Déduis de la caisse :  
+                                                </label>
+                                                <select name="caisse_id" id="edit_caisse_id" class=" form-control select2"
+                                                    data-toggle="select2" >
+                                                   
+                                                    @foreach ($caisses as $caisse)
+                                                       <option value="{{ $caisse->id }}">{{ $caisse->nom }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('caisse_id'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('caisse_id') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
                                         </div>
                                     </div>
     
@@ -459,100 +502,51 @@
 @section('script')
     <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
 
-    {{-- selection des statuts du achat --}}
-
-    <script>
-        $('#client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#prospect').prop('checked', false);
-            }
-
-        });
-
-        $('#prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#client').prop('checked', false);
-            }
-
-        });
-    </script>
+ 
 
     {{-- Modification d'un achat --}}
     <script>
         $('.edit-achat').click(function(e) {
 
             let that = $(this);
-
-            console.log(that.data('fournisseurid') );
             
             that.data('produitid') != "" ? $('#edit_produit_id option[value="' + that.data('produitid') + '"]').prop('selected', true) : $('#edit_produit_id').val('');
 
             that.data('fournisseurid') != "" ?  $('#edit_fournisseur_id option[value="' + that.data('fournisseurid') + '"]').prop('selected', true) :  $('#edit_fournisseur_id').val(''); ; 
+            that.data('caisseid') != "" ?  $('#edit_caisse_id option[value="' + that.data('caisseid') + '"]').prop('selected', true) :  $('#edit_caisse_id').val(''); ; 
         
 
             $('#edit_dateachat').val(that.data('dateachat'));
             
             $('#edit_quantite').val(that.data('quantite'));
-            $('#edit_prix_total').val(that.data('prixtotal'));
-
-
-       
+            $('#edit_prix_total').val(that.data('prixtotal'));       
 
             let currentFormAction = that.data('href');
             $('#form-edit-achat').attr('action', currentFormAction);
 
+              // Recharger le select 2
+            $('#edit_fournisseur_id').select2({
+                dropdownParent: $('#modal-edit-achat')
+             });
 
-
-
-            //    selection du type de achat
-
-
-            let currentType = that.data('type-achat');
-            let currentTypeentite = that.data('typeentite');
-            $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
-
-
-            if (currentType == "entité") {
-                $('.div-edit-individu').hide();
-
-            } else {
-                $('.div-edit-entite').hide();
-
-            }
-
-            $('#edit-type').change(function(e) {
-
-                if (e.currentTarget.value == "entité") {
-                    $('.div-edit-entite').show();
-                    $('.div-edit-individu').hide();
-
-                } else {
-                    $('.div-edit-entite').hide();
-                    $('.div-edit-individu').show();
-                }
-
-            });
-
-            $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
-
+              // Recharger le select 2
+            $('#edit_caisse_id').select2({
+                dropdownParent: $('#modal-edit-achat')
+             });
 
         });
 
+    </script>
 
-
-        // selection des statuts du achat  Modal modifier
-        $('#edit-client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-prospect').prop('checked', false);
-            }
-
+{{-- Ajout d'un achat --}}
+    <script>
+        // Recharger le select 2
+      $('#fournisseur_id').select2({
+            dropdownParent: $('#standard-modal-achat')
         });
-
-        $('#edit-prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-client').prop('checked', false);
-            }
-
+         // Recharger le select 2
+        $('#edit_caisse_id').select2({
+            dropdownParent: $('#standard-modal-achat')
         });
     </script>
 

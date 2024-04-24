@@ -9,8 +9,11 @@ class Vente extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $casts = [
-        'date_vente' => 'date',
+    // protected $casts = [
+    //     'date_vente' => 'date',
+    // ];
+    protected $dates = [
+        'date_vente',
     ];
 
 

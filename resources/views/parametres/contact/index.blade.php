@@ -59,12 +59,12 @@
                                     <span class="d-none d-lg-block">Types des contacts</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="#postes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                     <i class="mdi mdi-badge-account font-18"></i>
                                     <span class="d-none d-lg-block">Postes</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
 
                         <div class="tab-content">
@@ -73,7 +73,7 @@
                             @include('parametres.contact.types')
 
                             {{-- Onglet postes --}}
-                            @include('parametres.contact.postes')
+                            {{-- @include('parametres.contact.postes') --}}
                         </div>
                     </div>
                 </div>

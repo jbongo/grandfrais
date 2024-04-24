@@ -108,14 +108,13 @@ final class IndexTable extends PowerGridComponent
             ->addColumn('numero', function (Vente $model) {
                 return '<span class="badge bg-danger text-white font-bold py-1 px-2 fs-6">'.$model->numero.'</span>';
             })
-            ->addColumn('date_vente', fn (Vente $model) => Carbon::parse($model->date_vente)->format('d/m/Y')  )
+            ->addColumn('date_vente', fn (Vente $model) => $model->date_vente != null ? Carbon::parse($model->date_vente)->format('d/m/Y') : ''  )
             ->addColumn('montant', function(Vente $model){
                 return "<span class='badge bg-info text-white font-bold py-1 px-2 fs-6'>".number_format($model->montant, 2, ',', ' ')."</span>";
             })
 
             ->addColumn('produit', function (Vente $model) {          
-                return  '<span class=" text-primary font-bold py-1 px-2 fs-5">'.$model->description.'</span>';
-           
+                return  '<span class=" text-primary font-bold py-1 px-2 fs-5">'.$model->description.'</span>';           
             } )
             ->addColumn('quantite')
             // ->addColumn('unite_mesure', function (Vente $model) {          

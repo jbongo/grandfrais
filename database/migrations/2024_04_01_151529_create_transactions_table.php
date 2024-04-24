@@ -14,18 +14,21 @@ return new class extends Migration
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            // achat, vente, depense, depot, retrait
+
+            // achat, vente, depense, depot, retrait         
+            $table->string('operation')->nullable();
+            // debit ou credit   
             $table->string('type')->nullable();
-            // entrée, sortie
-            $table->string('nature')->nullable();
             $table->date('date_transaction')->nullable();
             $table->double('montant')->nullable();
             $table->text('description')->nullable();
             $table->integer('caisse_id')->nullable();
             $table->integer('user_id')->nullable();
-            $table->integer('achat_id')->nullable();
-            $table->integer('vente_id')->nullable();
-            $table->integer('depense_id')->nullable();
+            // achat_id, vente_id, depense_id
+            $table->integer('resource_id')->nullable();   
+            $table->double('solde')->nullable();
+
+
             $table->timestamps();
         });
     }

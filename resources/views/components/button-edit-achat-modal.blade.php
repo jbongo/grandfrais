@@ -8,6 +8,7 @@
             data-dateachat = {{$dateAchat}}
             data-prixtotal = "{{$prixTotal}}"
             data-fournisseurid = "{{$fournisseurId}}"
+            data-caisseid = "{{$caisseId}}"
             data-href = "{{$route}}"
             class="action-icon edit-achat text-success"> <i class="mdi mdi-square-edit-outline"></i>
         </a>

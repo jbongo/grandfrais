@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('produit_id')->nullable();
             $table->integer('fournisseur_id')->nullable();
             $table->integer('user_id')->nullable();
+            $table->integer('caisse_id')->nullable();
             $table->double('quantite')->nullable(); 
             $table->double('prix_unitaire')->nullable();
             $table->double('prix_total')->nullable();

@@ -272,17 +272,13 @@
                                                 <div class="mb-3">
                                                     <label for="edit_produit_id" class="form-label">
                                                         Produit <span class="text-danger">*</span>
-                                                    </label>
-        
+                                                    </label>        
                                                     <select name="produit_id" id="edit_produit_id"  class="select2x form-select select2x" data-toggle="select2"  data-placeholder=" ...">
                                                       
                                                         @foreach ($produits as $produit)
                                                             <option value="{{ $produit->id }}">{{ $produit->nom }}
                                                         @endforeach
                                                     </select>
-        
-                                                  
-        
                                                     @if ($errors->has('produit_id'))
                                                         <br>
                                                         <div class="alert alert-warning text-secondary " role="alert">
@@ -299,8 +295,7 @@
                                                     <label for="edit_date_vente" class="form-label">
                                                         Date de vente <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="date" id="edit_date_vente" name="date_vente"
-                                                        value="{{date('Y-m-d')}}"
+                                                    <input type="date" id="edit_date_vente" name="date_vente" value=""
                                                         class="form-control">
         
                                                     @if ($errors->has('date_vente'))
@@ -320,8 +315,7 @@
                                                     <label for="edit_quantite" class="form-label">
                                                         Quantité <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="number"  min="0" id="edit_quantite" name="quantite"
-                                                    required
+                                                    <input type="number"  min="0" id="edit_quantite" name="quantite" required
                                                         value="{{ old('quantite') ? old('quantite') : '' }}"
                                                         class="form-control">
         

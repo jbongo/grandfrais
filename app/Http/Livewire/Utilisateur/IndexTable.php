@@ -170,7 +170,7 @@ final class IndexTable extends PowerGridComponent
        
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(User $user) {
-                    return ['route' => route('utilisateur.show', Crypt::encrypt($user->id)),
+                    return ['route' => route('contact.show', Crypt::encrypt($user->id)),
                     'tooltip' => "Afficher",
                     'permission' => Gate::allows('permission', 'afficher-utilisateur'),                    
                     ];
