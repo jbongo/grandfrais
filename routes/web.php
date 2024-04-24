@@ -339,6 +339,7 @@ Route::controller(CaisseController::class)->group(function () {
     Route::get('/caisses/archives', 'archives')->name('caisse.archives')->middleware(['auth']);
     Route::post('/caisses/ajouter', 'store')->name('caisse.store')->middleware(['auth']);
     Route::get('/caisses/show/{caisseId}', 'show')->name('caisse.show')->middleware(['auth']);
+    Route::post('/caisses/operation/{caisseId}/{operation}', 'operation')->name('caisse.operation')->middleware(['auth']);
     Route::post('/caisses/modifier/{caisseId}', 'update')->name('caisse.update')->middleware(['auth']);
     Route::post('/caisses/archiver/{caisseId}', 'archive')->name('caisse.archive')->middleware(['auth']);
     Route::post('/caisses/desarchiver/{caisseId}', 'unarchive')->name('caisse.unarchive')->middleware(['auth']);

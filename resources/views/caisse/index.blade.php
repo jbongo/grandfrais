@@ -342,8 +342,7 @@
             let that = $(this);
             // $('#edit-typedepense_id').val(that.data('typedepense_id'));
             $('#edit_quantite').val(that.data('quantite'));
-            $('#edit_nom').val(that.data('nom'));
-            
+            $('#edit_nom').val(that.data('nom'));            
 
             let currentFormAction = that.data('href');
 
@@ -357,21 +356,32 @@
         })
 
 
+    </script>
 
-        // selection des statuts du caisse  Modal modifier
-        $('#edit-client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-prospect').prop('checked', false);
-            }
+    {{-- Dépot caisse --}}
+
+    <script>
+        $('.depot-caisse').click(function(e) {
+
+            let that = $(this);
+            let currentFormAction = that.data('href');
+            $('#form-depot').attr('action', currentFormAction);
+
+        });
+
+    </script>
+
+    {{-- Retrait caisse --}}
+
+    <script>
+        $('.retrait-caisse').click(function(e) {
+
+            let that = $(this);
+            let currentFormAction = that.data('href');
+            $('#form-retrait').attr('action', currentFormAction);
 
         });
 
-        $('#edit-prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-client').prop('checked', false);
-            }
-
-        });
     </script>
 
     <script>

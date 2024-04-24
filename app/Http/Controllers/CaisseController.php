@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Caisse;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
-use Crypt;
+use Crypt, Auth;
 
 class CaisseController extends Controller
 {
@@ -70,6 +71,46 @@ class CaisseController extends Controller
         return redirect()->route('caisse.index')->with('ok', 'Caisse modifié');
 
     }
+    
+    /**
+     * Opération dépots / retraits
+     */
+    public function operation(Request $request,  $caisse_id, $operation)
+    {
+        $request->validate([
+            "montant" => "required",
+        ]);
+
+        $caisse = Caisse::find(Crypt::decrypt($caisse_id));
+
+        if ($operation == 'dépot') {
+            $caisse->solde += $request->montant;
+        } elseif ($operation == 'retrait') {
+            $caisse->solde -= $request->montant;
+        }
+
+         // Enregistrer Transaction
+         $data = [
+            'operation' => $operation,
+            'type' => $operation == 'dépot' ? 'crédit' : 'débit',
+            'date_transaction' => $request->date_operation,
+            'montant' => $request->montant,
+            'description' => "$operation caisse ",
+            'caisse_id' => Crypt::decrypt($caisse_id),
+            'user_id' => Auth::user()->id,
+            'resource_id' => Crypt::decrypt($caisse_id),
+            'solde' => $caisse?->solde,
+        ];
+        
+        Transaction::ajouter($data);
+
+
+        $caisse->save();
+
+        return redirect()->route('caisse.index')->with('ok', 'Caisse modifié');
+
+    }
+
 
     /**
      * Remove the specified resource from storage.
