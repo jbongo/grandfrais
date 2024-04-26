@@ -228,7 +228,7 @@
     
     
     {{-- Modifier une caisse --}}
-    <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+    <div id="edit-caisse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content ">
                 <div class="modal-header">
@@ -341,8 +341,9 @@
 
             let that = $(this);
             // $('#edit-typedepense_id').val(that.data('typedepense_id'));
-            $('#edit_quantite').val(that.data('quantite'));
+            $('#edit_solde').val(that.data('solde'));
             $('#edit_nom').val(that.data('nom'));            
+            $('#edit_description').val(that.data('description'));            
 
             let currentFormAction = that.data('href');
 

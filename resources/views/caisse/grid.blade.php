@@ -39,7 +39,13 @@
                     <div class="row mt-4" style="overflow-wrap: normal;display: flex; flex-direction: row; justify-content:center" >                    
                             
                         <div class="col-4">
-                            <a href="" class="btn w-100 btn-light text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier la caisse"><i class="mdi mdi-lead-pencil"></i></a>
+                            <a href="" class="btn w-100 btn-light text-success edit-caisse" 
+                            data-href={{route('caisse.update', Crypt::encrypt($caisse->id))}}
+                            data-caisse_id = {{$caisse->id}}
+                            data-nom = "{{$caisse->nom}}"
+                            data-solde = "{{$caisse->solde}}"
+                            data-description = "{{$caisse->description}}"
+                            data-bs-toggle="modal" data-bs-target="#edit-caisse" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier la caisse"><i class="mdi mdi-lead-pencil"></i></a>
                         </div>
                         <div class="col-4">
                             <a href="{{route('caisse.show', Crypt::encrypt($caisse->id))}}" class="btn w-100 btn-light text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Détail de la caisse"><i class="mdi mdi-eye-outline"></i></a>

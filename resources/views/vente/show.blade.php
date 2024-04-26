@@ -135,16 +135,9 @@
                                                         </div>
                                                     </div>
 
-
-
-
                                                     <p class="mb-1">Date de vente:
-                                                        {{$vente->date_vente?->format('d/m/Y') }}
+                                                        {{$vente->date_vente }}
                                                     </p>
-
-
-
-
                                                     <!-- Product description -->
                                                     <div class="mt-4">
                                                         <h6 class="font-14">Prix total vente </h6>
