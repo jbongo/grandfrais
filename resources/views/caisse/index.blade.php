@@ -66,14 +66,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            @can('permission', 'ajouter-caisse')
+                            {{-- @can('permission', 'ajouter-caisse') --}}
                                 <div class="d-flex justify-content-start">
                                     <a class="btn btn-primary mb-2" href="#add-caisse" class="btn btn-primary mb-2" data-bs-toggle="modal"
                                     data-bs-target="#standard-modal-caisse">
                                         <i class="mdi mdi-plus-circle me-2"></i> Ajouter caisse
                                     </a>                             
                                 </div>
-                            @endcan
+                            {{-- @endcan --}}
                             
                             @if(Auth::user()->is_admin)
                             
