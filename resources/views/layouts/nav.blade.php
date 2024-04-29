@@ -437,4 +437,8 @@
     .nav-pills .show>.nav-link {
         background-color: #6c757d !important;
     }
+
+    body[data-layout=detached] .leftside-menu .side-nav .side-nav-forth-level li a, body[data-layout=detached] .leftside-menu .side-nav .side-nav-second-level li a, body[data-layout=detached] .leftside-menu .side-nav .side-nav-third-level li a {
+    color: #000;
+}
 </style>
