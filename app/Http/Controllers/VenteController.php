@@ -6,6 +6,7 @@ use App\Models\Vente;
 use App\Models\Produit;
 use App\Models\ProduitVente;
 use App\Models\Caisse;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -60,6 +61,9 @@ class VenteController extends Controller
 
         $prix_global = 0;
         $description = "";
+        $caisse = Caisse::where('est_principale', true)->first();
+        $benefice_total = 0;
+
         foreach ($ligneVentes as $ligne) {
             
             // 0 => produit_id, 1 => prix_unitaire, 2 => quantite
@@ -75,7 +79,9 @@ class VenteController extends Controller
             $description_prix_total = $prix_unitaire_modifie == false ? $prix_total. " €" : "<span style='color:red;'>" . $prix_total . " €</span>";
             $description .= $produit->nom . " : ". $description_prix_total . "  |  ";
 
-            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total]);
+            $benefice = ($prix - $produit->prix_achat_ttc) * $quantite;
+            $benefice_total += $benefice;
+            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'benefice' => $benefice]);
 
              // MAJ Stock
 
@@ -84,7 +90,6 @@ class VenteController extends Controller
              $produit->save();
  
              // MAJ Caisse
-             $caisse = Caisse::where('est_principale', true)->first();
              if($caisse != null){
                  $caisse->solde += $prix_total;
                  $caisse->save();
@@ -94,8 +99,23 @@ class VenteController extends Controller
 
         $vente->montant = $prix_global;
         $vente->description = $description;     
+        $vente->benefice = $benefice_total;     
         $vente->save();
 
+        // Enregistrer Transaction
+        $data = [
+            'operation' => 'vente',
+            'type' => 'crédit',
+            'date_transaction' => $request->date_vente,
+            'montant' => $prix_global,
+            'description' => "Vente n° ".$vente->numero,
+            'caisse_id' => $caisse->id,
+            'user_id' => Auth::user()->id,
+            'resource_id' => $vente->id,
+            'solde' => $caisse?->solde,
+        ];
+    
+        Transaction::ajouter($data);
 
         return redirect()->route('vente.index')->with('ok', 'Vente enregistrée avec succès');
     }
@@ -140,7 +160,9 @@ class VenteController extends Controller
         $vente->save();
 
         $prix_global = 0;
+        $benefice_total = 0;
         $description = "";
+        $ancien_prix = $vente->montant;
 
        
 
@@ -169,8 +191,9 @@ class VenteController extends Controller
             $description_prix_total = $prix_unitaire_modifie == false ? $prix_total. " €" : "<span style='color:red;'>" . $prix_total . " €</span>";
             $description .= $produit->nom . " : ". $description_prix_total . "  |  ";
 
-
-            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'prix_unitaire_modifie' => $prix_unitaire_modifie]);
+            $benefice = ($prix - $produit->prix_achat_ttc) * $quantite;
+            $benefice_total += $benefice;
+            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'prix_unitaire_modifie' => $prix_unitaire_modifie, 'benefice' => $benefice]);
 
             $caisse = Caisse::where('est_principale', true)->first();
 
@@ -201,10 +224,24 @@ class VenteController extends Controller
         }
 
         $vente->montant = $prix_global;
-        $vente->description = $description;     
+        $vente->description = $description; 
+        $vente->benefice = $benefice_total;     
         $vente->save();
 
-
+        // Enregistrer Transaction
+        $data = [
+            'operation' => 'vente',
+            'type' => 'crédit',
+            'date_transaction' => $request->date_vente,
+            'montant' => $prix_global,
+            'description' => "Modification Vente n° ".$vente->numero." ancien montant: ".$ancien_prix." => nouveau montant: ".$prix_global,
+            'caisse_id' => $caisse->id,
+            'user_id' => Auth::user()->id,
+            'resource_id' => $vente->id,
+            'solde' => $caisse?->solde,
+        ];
+    
+        Transaction::ajouter($data);
 
         return redirect()->route('vente.index')->with('ok', 'Vente modifiée avec succès');
     }

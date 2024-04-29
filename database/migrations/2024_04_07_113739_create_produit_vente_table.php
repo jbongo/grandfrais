@@ -19,6 +19,7 @@ return new class extends Migration
             $table->double('prix_unitaire')->nullable();
             $table->boolean('prix_unitaire_modifie')->default(false);
             $table->double('prix_total')->nullable();
+            $table->double('benefice')->nullable();
             $table->timestamps();
         });
     }

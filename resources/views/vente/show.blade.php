@@ -167,6 +167,7 @@
                                                                 <th>Prix unitaire</th>
                                                                 <th>Prix modifié</th>
                                                                 <th>Prix total</th>
+                                                                <th>Bénéfices</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -194,6 +195,14 @@
                                                                     </td>
                                                                     <td>
                                                                         <span class="fw-bold me-2">{{$produit->pivot->prix_total }}</span> 
+                                                                    </td>
+                                                                    <td>
+                                                                        @if($produit->pivot->benefice > 0)
+                                                                            <span class="fw-bold me-2">{{$produit->pivot->benefice }}</span> 
+                                                                        @else 
+                                                                            <span class=" text-danger fw-bold me-2">{{$produit->pivot->benefice }}</span> 
+                                                                        @endif
+
                                                                     </td>
                                                                 </tr>
                                                             @endforeach

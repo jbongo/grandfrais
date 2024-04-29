@@ -112,7 +112,13 @@ final class IndexTable extends PowerGridComponent
             ->addColumn('montant', function(Vente $model){
                 return "<span class='badge bg-info text-white font-bold py-1 px-2 fs-6'>".number_format($model->montant, 2, ',', ' ')."</span>";
             })
-
+            ->addColumn('benefice', function(Vente $model){
+                if($model->benefice < 0){
+                    return "<span class='badge bg-danger text-white font-bold py-1 px-2 fs-6'>".number_format($model->benefice, 2, ',', ' ')."</span>";
+                }else{
+                    return "<span class='badge bg-primary text-white font-bold py-1 px-2 fs-6'>".number_format($model->benefice, 2, ',', ' ')."</span>";
+                }
+            })
             ->addColumn('produit', function (Vente $model) {          
                 return  '<span class=" text-primary font-bold py-1 px-2 fs-5">'.$model->description.'</span>';           
             } )
@@ -149,6 +155,7 @@ final class IndexTable extends PowerGridComponent
             Column::make('Numéro', 'numero')->searchable()->sortable(),
             Column::make('Date vente', 'date_vente')->searchable()->sortable(),
             Column::make('Montant Total', 'montant')->searchable()->sortable(),
+            Column::make('Bénéfices', 'benefice')->searchable()->sortable(),
             Column::make('Produit', 'produit')->searchable()->sortable(),
             // Column::make('Quantité', 'quantite')->searchable()->sortable(),
             // Column::make('Unité de mesure', 'unite_mesure')->searchable()->sortable(),

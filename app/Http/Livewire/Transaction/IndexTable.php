@@ -21,7 +21,8 @@ final class IndexTable extends PowerGridComponent
     public $transactions;
     public string $sortField = 'created_at';    
     public string $sortDirection = 'desc';
-    
+
+
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -41,7 +42,7 @@ final class IndexTable extends PowerGridComponent
             ->showSearchInput()
             ->showToggleColumns(),
             Footer::make()
-                ->showPerPage()
+                ->showPerPage(100)
                 ->showRecordCount(),
         ];
     }

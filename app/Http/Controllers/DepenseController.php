@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Depense;
 use App\Models\Typedepense;
 use App\Models\Caisse;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-
+use Auth;
 class DepenseController extends Controller
 {
     /**
@@ -51,6 +52,21 @@ class DepenseController extends Controller
             $caisse = Caisse::find($request->caisse_id);
             $caisse->solde = $caisse->solde - $request->montant;
             $caisse->update();
+
+            // Enregistrer Transaction
+            $data = [
+                'operation' => 'dépense',
+                'type' => 'débit',
+                'date_transaction' => $request->date_depense,
+                'montant' => $request->montant,
+                'description' => "Ajout Dépense : ".$depense->typedepense->type,
+                'caisse_id' => $request->caisse_id,
+                'user_id' => Auth::user()->id,
+                'resource_id' => $depense->id,
+                'solde' => $caisse?->solde,
+            ];
+        
+            Transaction::ajouter($data);
     
             return redirect()->route('depense.index')->with('success', 'Dépense ajoutée avec succès');
     }
@@ -103,6 +119,7 @@ class DepenseController extends Controller
          
             $nouvelle_caisse->update();
             $ancienne_caisse->update();
+            $caisse = $nouvelle_caisse;
 
         }else{
             $caisse = Caisse::find($request->caisse_id);
@@ -111,6 +128,20 @@ class DepenseController extends Controller
 
         }
 
+         // Enregistrer Transaction
+         $data = [
+            'operation' => 'dépense',
+            'type' => 'débit',
+            'date_transaction' => $request->date_depense,
+            'montant' => $request->montant,
+            'description' => "Modification Dépense : ".$depense->typedepense?->type." | ancien montant: ".$ancien_montant." => nouveau montant: ".$request->montant,
+            'caisse_id' => $request->caisse_id,
+            'user_id' => Auth::user()->id,
+            'resource_id' => $depense->id,
+            'solde' => $caisse?->solde,
+        ];
+    
+        Transaction::ajouter($data);
 
         return redirect()->route('depense.index')->with('success', 'Dépense modifiée avec succès');
     }

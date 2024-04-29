@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('user_id')->nullable();            
             $table->date('date_vente')->nullable();
             $table->double('montant')->nullable();
+            $table->double('benefice')->nullable();
             $table->text('description')->nullable();
             $table->string('statut')->nullable();
             $table->string('archive')->default(false);
