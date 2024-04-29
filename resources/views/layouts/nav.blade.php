@@ -139,7 +139,7 @@
             </li>
         @endcan
 
-        @can('permission', 'afficher-caisse')
+        {{-- @can('permission', 'afficher-caisse') --}}
             <li class="side-nav-item {{ $li_depense }}">
                 <a href="{{ route('caisse.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                     class="side-nav-link">
@@ -147,7 +147,7 @@
                     <span> Caisse </span>
                 </a>
             </li>
-        @endcan
+        {{-- @endcan --}}
 
         @can('permission', 'afficher-utilisateur')
             <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
