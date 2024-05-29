@@ -131,23 +131,6 @@
         <!-- end row -->
 
 
-        {{-- 
-        
-        $prix_unitaire = $request->prix_unitaire;
-        $quantite = $request->quantite;
-        $prix_total = $prix_unitaire * $quantite;
-
-
-        $achat->produit_id = $request->produit_id;
-        $achat->user_id = Auth::user()->id;
-        $achat->quantite = $request->quantite;
-        $achat->prix_unitaire = $prix_unitaire;
-        $achat->prix_total = $prix_total;
-        $achat->date_achat = $request->date_achat;
-        
-        --}}
-
-
 
 {{-- Ajout d'un achat --}}
 <div id="standard-modal-achat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
@@ -172,15 +155,13 @@
                                     <div class="row">
     
     
-                                        <div class="col-sm-6">
-    
+                                        <div class="col-sm-6">  
     
                                             <div class="mb-3">
                                                 <label for="produit_id" class="form-label">
                                                     Produit <span class="text-danger">*</span>
                                                 </label>
     
-                                                {{-- <select name="produit_id" id="produit_id"   class="select2 form-control select2-multiple"  data-toggle="select2"  data-placeholder=" ..."> --}}
                                                 <select name="produit_id" id="produit_id"  class="select2 form-control select2-multiplex" data-toggle="select2"  required data-placeholder=" ...">                                                  
                                                     <option value=""></option>
                                                     @foreach ($produits as $produit)
@@ -218,6 +199,67 @@
                                             </div>
                                             
                                             
+                                           
+
+                                        </div>
+    
+                                        <div class="col-sm-6">    
+                                            <div class="mb-3">
+                                                <label for="quantite" class="form-label">
+                                                    Quantité (en kilo ou unité) <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1" step="0.01" id="quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('quantite'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('quantite') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="prix_total" class="form-label">
+                                                    Prix total d'achat <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1"  id="prix_total" name="prix_total" required value="{{ old('prix_total') ? old('prix_total') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('prix_total'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('prix_total') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="autres_charges" class="form-label">
+                                                    Autres charges  <span class="text-danger">(livraison, transport, etc)</span>
+                                                </label>
+                                                <input type="number"  min="1" id="autres_charges" name="autres_charges" required value="{{ old('autres_charges') ? old('autres_charges') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('autres_charges'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('autres_charges') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                          
+                                        </div>
+                                    </div>
+    
+                                    <br>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-6">
                                             <div class=" mb-3">
                                                 <label for="fournisseur_id" class="form-label">
                                                     Sélectionnez le fournisseur 
@@ -244,42 +286,8 @@
                                                     </div>
                                                 @endif
                                             </div>
-
                                         </div>
-    
-                                        <div class="col-sm-6">    
-                                            <div class="mb-3">
-                                                <label for="quantite" class="form-label">
-                                                    Quantité (en kilo ou unité) <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="number"  min="1" step="0.01" id="quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
-    
-                                                @if ($errors->has('quantite'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('quantite') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="prix_total" class="form-label">
-                                                    Prix total d'achat <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="number"  min="1" step="0.01" id="prix_total" name="prix_total" required value="{{ old('prix_total') ? old('prix_total') : '' }}" class="form-control">
-    
-                                                @if ($errors->has('prix_total'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('prix_total') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
+                                        <div class="col-sm-6">
                                             <div class=" mb-3">
                                                 <label for="caisse_id" class="form-label">
                                                     Déduis de la caisse :  
@@ -302,7 +310,6 @@
                                             </div>
                                         </div>
                                     </div>
-    
     
                                     <!-- end row -->
     
@@ -354,8 +361,8 @@
                                                 <label for="edit_produit_id" class="form-label">
                                                     Produit <span class="text-danger">*</span>
                                                 </label>
-                                                <select name="produit_id" id="edit_produit_id"  class="form-select " required >       
-                                                    <option value=""></option>                                           
+                                                <select name="produit_id" id="edit_produit_id"  class="select2 form-control select2-multiplex" data-toggle="select2"   required >       
+                                                                                        
                                                     @foreach ($produits as $produit)
                                                         <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
                                                     @endforeach
@@ -390,6 +397,68 @@
                                             </div>
                                             
                                             
+                                            
+
+                                        </div>
+    
+                                        <div class="col-sm-6">    
+                                            <div class="mb-3">
+                                                <label for="edit_quantite" class="form-label">
+                                                    Quantité (en kilo ou unité) <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1" step="0.01" id="edit_quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('quantite'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('quantite') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="edit_prix_total" class="form-label">
+                                                    Prix total d'achat <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number"  min="1"  id="edit_prix_total" name="prix_total" required value="{{ old('prix_total') ? old('prix_total') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('prix_total'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('prix_total') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>   
+                                            
+                                            <div class="mb-3">
+                                                <label for="edit_autres_charges" class="form-label">
+                                                    Autres charges <span class="text-danger">(livraison, transport, etc)</span>
+                                                </label>
+                                                <input type="number"  min="1"  id="edit_autres_charges" name="autres_charges" required value="{{ old('autres_charges') ? old('autres_charges') : '' }}" class="form-control">
+    
+                                                @if ($errors->has('autres_charges'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('autres_charges') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <br>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+
                                             <div class=" mb-3">
                                                 <label for="edit_fournisseur_id" class="form-label">
                                                     Sélectionnez le fournisseur 
@@ -417,39 +486,7 @@
                                             </div>
 
                                         </div>
-    
-                                        <div class="col-sm-6">    
-                                            <div class="mb-3">
-                                                <label for="edit_quantite" class="form-label">
-                                                    Quantité (en kilo ou unité) <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="number"  min="1" step="0.01" id="edit_quantite" name="quantite" required value="{{ old('quantite') ? old('quantite') : '' }}" class="form-control">
-    
-                                                @if ($errors->has('quantite'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('quantite') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="edit_prix_total" class="form-label">
-                                                    Prix total d'achat <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="number"  min="1" step="0.01" id="edit_prix_total" name="prix_total" required value="{{ old('prix_total') ? old('prix_total') : '' }}" class="form-control">
-    
-                                                @if ($errors->has('prix_total'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('prix_total') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
+                                        <div class="col-sm-6">
 
                                             <div class=" mb-3">
                                                 <label for="edit_caisse_id" class="form-label">
@@ -475,7 +512,6 @@
                                         </div>
                                     </div>
     
-    
                                     <!-- end row -->
     
                                 </div> <!-- end card-body -->
@@ -486,7 +522,7 @@
     
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="submit" class="btn btn-success">Modifier</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
     
                 </div>
@@ -520,6 +556,7 @@
             
             $('#edit_quantite').val(that.data('quantite'));
             $('#edit_prix_total').val(that.data('prixtotal'));       
+            $('#edit_autres_charges').val(that.data('autrescharges'));       
 
             let currentFormAction = that.data('href');
             $('#form-edit-achat').attr('action', currentFormAction);
@@ -533,6 +570,9 @@
             $('#edit_caisse_id').select2({
                 dropdownParent: $('#modal-edit-achat')
              });
+             $('#edit_produit_id').select2({
+                dropdownParent: $('#modal-edit-achat')
+            });
 
         });
 
@@ -544,8 +584,11 @@
       $('#fournisseur_id').select2({
             dropdownParent: $('#standard-modal-achat')
         });
-         // Recharger le select 2
-        $('#edit_caisse_id').select2({
+        
+        $('#caisse_id').select2({
+            dropdownParent: $('#standard-modal-achat')
+        });
+        $('#produit_id').select2({
             dropdownParent: $('#standard-modal-achat')
         });
     </script>
@@ -570,7 +613,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver la achat',
+                    title: 'Archiver l\'achat',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -610,7 +653,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Achat non archivée',
+                            'Achat non archivé',
                             'error'
                         )
                     }

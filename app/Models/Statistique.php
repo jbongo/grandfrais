@@ -13,12 +13,68 @@ class Statistique extends Model
     * Retourne le CA 
     */
     public function chiffreAffaire($dateDeb, $dateFin){
-
-        $caAchats = $this->montantAchats($dateDeb, $dateFin);
+        
         $caVentes = $this->montantVentes($dateDeb, $dateFin);
-        $caDepenses = $this->montantDepenses($dateDeb, $dateFin);
+        return $caVentes;
+    }
 
-        return $caDepenses;
+    /*
+    * Retourne les CA mensuels
+    */
+    public function chiffreAffaireMensuels($annee) {
+        
+        //  ######## Calcul CA Sur l'année ##########
+        for ($i=1; $i <= 12 ; $i++) {                
+                       
+            $month = $i < 10 ? "0$i" : $i;
+            $date_deb = $annee.'-'.$month.'-01';
+            $date_fin = $annee.'-'.$month.'-31';
+            
+            $ca[$i] = $this->chiffreAffaire($date_deb, $date_fin);
+
+        }
+
+        return $ca;
+
+    }
+
+    /*
+    * Retourne les benefices nets mensuels
+    */
+    public function beneficeNetMensuels($annee) {
+
+        //  ######## Calcul CA Sur l'année ##########
+        for ($i=1; $i <= 12 ; $i++) {                
+                       
+            $month = $i < 10 ? "0$i" : $i;
+            $date_deb = $annee.'-'.$month.'-01';
+            $date_fin = $annee.'-'.$month.'-31';
+            
+            $benefices[$i] = $this->beneficeNet($date_deb, $date_fin);
+
+        }
+
+        return $benefices;
+    }
+
+    /*
+    * Retourne les dépenses mensuelles
+    */
+
+    public function depensesMensuelles($annee) {
+
+        //  ######## Calcul CA Sur l'année ##########
+        for ($i=1; $i <= 12 ; $i++) {                
+                       
+            $month = $i < 10 ? "0$i" : $i;
+            $date_deb = $annee.'-'.$month.'-01';
+            $date_fin = $annee.'-'.$month.'-31';
+            
+            $depenses[$i] = $this->depenses($date_deb, $date_fin);
+
+        }
+
+        return $depenses;
     }
 
     /*
@@ -57,6 +113,16 @@ class Statistique extends Model
         
         $caDepenses = Depense::whereBetween('date_depense', [$dateDeb, $dateFin])->where('archive', false)->sum('montant');
         return $caDepenses;
+    }
+
+    /*
+    * Retourne le classement des meilleurs produits vendues par bénéfice
+    */
+    public function meilleursVentes($dateDeb, $dateFin){
+
+        $ventes = Vente::whereBetween('date_vente', [$dateDeb, $dateFin])->where('archive', false)->get();
+
+        dd($ventes);
     }
 
 }

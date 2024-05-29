@@ -10,12 +10,28 @@ class DashboardController extends Controller
 {
     //
     
-    public function  index(){
+    public function  index($annee = null){
+        
+        // $annee = 2023;
+   
+        $stat = new Statistique();
+           
+        
+        if( !is_null($annee)){
+            $annee_n = $annee;
+    
+        }else{
+            $annee_n = date('Y');
+        }
+
+        $ca_n = $stat->chiffreAffaireMensuels($annee_n);
+        $benefices_n = $stat->beneficeNetMensuels($annee_n);
+        dd($benefices_n);
+
         
         $caisse = Caisse::where('est_principale', true)->first();
         $montantCaisse = $caisse->solde;
 
-        $stat = new Statistique();
         // CA du jour
         $caJour = $stat->chiffreAffaire(date('Y-m-d'), date('Y-m-d'));
 
@@ -28,7 +44,7 @@ class DashboardController extends Controller
 
         // benefice du mois
         $beneficeMois = $stat->beneficeNet($date.'-01', $date.'-31');
-        // dd($beneficeMois);
+        dd($beneficeMois);
 
        
         return view('dashboard'); 

@@ -437,8 +437,8 @@
     .nav-pills .show>.nav-link {
         background-color: #6c757d !important;
     }
+    body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapse>ul a, body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapsing>ul a {
 
-    body[data-layout=detached] .leftside-menu .side-nav .side-nav-forth-level li a, body[data-layout=detached] .leftside-menu .side-nav .side-nav-second-level li a, body[data-layout=detached] .leftside-menu .side-nav .side-nav-third-level li a {
-    color: #000;
+    background-color: #263349 ;
 }
 </style>

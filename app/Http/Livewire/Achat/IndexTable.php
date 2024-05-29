@@ -113,11 +113,18 @@ final class IndexTable extends PowerGridComponent
                 return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model->quantite.'</span>';
             })
        
+           
+            ->addColumn('prix_total', function(Achat $model) {
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_total,0,' ').'</span>';
+            })
             ->addColumn('prix_unitaire', function(Achat $model) {
                 return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,' ').'</span>';
             })
-            ->addColumn('prix_total', function(Achat $model) {
-                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_total,0,' ').'</span>';
+            ->addColumn('prix_unitaire', function(Achat $model) {
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,' ').'</span>';
+            })
+            ->addColumn('prix_unitaire_revient', function(Achat $model) {
+                return  '<span class="font-bold text-danger py-1 px-2 fs-5">'.number_format($model->autres_charges,0,' ').'</span>';
             })
             ->addColumn('fournisseur', function (Achat $model) { 
 
@@ -139,10 +146,10 @@ final class IndexTable extends PowerGridComponent
                 $individu = $contact?->individu;
                 
                 return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
-            })
-            ->addColumn('created_date', function (Achat $model) {          
-                return $model->created_at->format('d/m/Y');
             });
+            // ->addColumn('created_date', function (Achat $model) {          
+            //     return $model->created_at->format('d/m/Y');
+            // });
             // ->addColumn('statut');
     }
 
@@ -168,14 +175,16 @@ final class IndexTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
             Column::make('Quantité', 'quantite')->searchable()->sortable(),
-            Column::make('Prix unitaire', 'prix_unitaire')->searchable()->sortable(),
             Column::make('Prix total', 'prix_total')->searchable()->sortable(),
+            Column::make('Prix achat unit', 'prix_unitaire')->searchable()->sortable(),
+            Column::make('Prix revient', 'prix_unitaire_revient')->searchable()->sortable(),
+            Column::make('Autres charges', 'autres_charges')->searchable()->sortable(),
             Column::make('Fournisseur', 'fournisseur')->searchable()->sortable(),
 
         
             Column::make('Date achat', 'date_achat')->searchable()->sortable(),  
             // Column::make('Statut', 'statut')->searchable()->sortable(),
-            Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
+            // Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
             // Column::make('Actions')
 
         ];
@@ -229,6 +238,7 @@ final class IndexTable extends PowerGridComponent
                 'caisseId' => $achat->caisse_id,
                 'quantite' => $achat->quantite,
                 'prixTotal' => $achat->prix_total,
+                'autresCharges' =>$achat->autres_charges,
 
                 'achat'=> $achat,                
                 'permission' => Gate::allows('permission', 'modifier-contact'),

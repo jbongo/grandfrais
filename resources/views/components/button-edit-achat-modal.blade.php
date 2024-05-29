@@ -7,6 +7,7 @@
             data-quantite = "{{$quantite}}"
             data-dateachat = {{$dateAchat}}
             data-prixtotal = "{{$prixTotal}}"
+            data-autrescharges = "{{$autresCharges}}"
             data-fournisseurid = "{{$fournisseurId}}"
             data-caisseid = "{{$caisseId}}"
             data-href = "{{$route}}"

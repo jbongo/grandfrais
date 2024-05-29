@@ -19,7 +19,10 @@ return new class extends Migration
             $table->integer('caisse_id')->nullable();
             $table->double('quantite')->nullable(); 
             $table->double('prix_unitaire')->nullable();
+            $table->double('prix_unitaire_revient')->nullable();
             $table->double('prix_total')->nullable();
+            $table->double('prix_total_revient')->nullable();
+            $table->double('autres_charges')->nullable();
             $table->date('date_achat')->nullable();
             $table->string('statut')->nullable();
             $table->string('archive')->default(false);

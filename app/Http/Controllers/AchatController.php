@@ -47,6 +47,8 @@ class AchatController extends Controller
         $prix_total = $request->prix_total;
         $quantite = $request->quantite;
         $prix_unitaire =  round($prix_total / $quantite,2);
+        $prix_total_revient = $prix_total + $request->autres_charges;
+        $prix_unitaire_revient = round($prix_total_revient / $quantite,2);
 
         $achat = new Achat();
         $achat->produit_id = $request->produit_id;
@@ -56,6 +58,9 @@ class AchatController extends Controller
         $achat->quantite = $request->quantite;
         $achat->prix_unitaire = $prix_unitaire;
         $achat->prix_total = $prix_total;
+        $achat->autres_charges = $request->autres_charges;
+        $achat->prix_total_revient = $prix_total_revient;
+        $achat->prix_unitaire_revient = $prix_unitaire_revient;
         $achat->date_achat = $request->date_achat;
 
         $achat->save();
@@ -68,7 +73,7 @@ class AchatController extends Controller
          // MAJ Caisse
          $caisse = Caisse::where('id', $request->caisse_id)->first();
          if($caisse != null){
-             $caisse->solde -= $prix_total;
+             $caisse->solde -= $prix_total_revient;
              $caisse->save();
          }
 
@@ -78,7 +83,7 @@ class AchatController extends Controller
             'operation' => 'achat',
             'type' => 'crédit',
             'date_transaction' => $request->date_achat,
-            'montant' => $prix_total,
+            'montant' => $prix_total_revient,
             'description' => "Achat - ".$produit->nom,
             'caisse_id' => $request->caisse_id,
             'user_id' => Auth::user()->id,
@@ -110,12 +115,14 @@ class AchatController extends Controller
         $achat = Achat::find(Crypt::decrypt($achat_id));
 
         $ancienne_quantite  = $achat->quantite;
-        $ancien_prix = $achat->prix_total;
+        $ancien_prix = $achat->prix_total_revient;
         $ancienne_caisse_id = $achat->caisse_id;
 
         $prix_total = $request->prix_total;
         $quantite = $request->quantite;
         $prix_unitaire =  round($prix_total / $quantite,2);
+        $prix_total_revient = $prix_total + $request->autres_charges;
+        $prix_unitaire_revient = round($prix_total_revient / $quantite,2);
 
       
         $achat->produit_id = $request->produit_id;
@@ -124,6 +131,9 @@ class AchatController extends Controller
         $achat->quantite = $request->quantite;
         $achat->prix_unitaire = $prix_unitaire;
         $achat->prix_total = $prix_total;
+        $achat->autres_charges = $request->autres_charges;
+        $achat->prix_total_revient = $prix_total_revient;
+        $achat->prix_unitaire_revient = $prix_unitaire_revient;
         $achat->date_achat = $request->date_achat;
 
         $achat->save();
@@ -143,7 +153,7 @@ class AchatController extends Controller
 
         $nouvelle_caisse = Caisse::where('id', $request->caisse_id)->first();
   
-        $nouvelle_caisse->solde -= $prix_total;
+        $nouvelle_caisse->solde -= $prix_total_revient;
         $nouvelle_caisse->save();
 
 
@@ -152,8 +162,8 @@ class AchatController extends Controller
             'operation' => 'achat',
             'type' => 'crédit',
             'date_transaction' => $request->date_achat,
-            'montant' => $prix_total,
-            'description' => "Modification Achat - ".$produit->nom. " - Quantite : ".$ancienne_quantite." -> ".$quantite." - Prix total: ".$ancien_prix." -> ".$prix_unitaire,
+            'montant' => $prix_total_revient,
+            'description' => "Modification Achat - ".$produit->nom. " - Quantite : ".$ancienne_quantite." -> ".$quantite." - Prix total: ".$ancien_prix." -> ".$prix_total_revient,
             'caisse_id' => $request->caisse_id,
             'user_id' => Auth::user()->id,
             'resource_id' => $achat->id,
