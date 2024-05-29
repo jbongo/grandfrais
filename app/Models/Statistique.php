@@ -122,7 +122,7 @@ class Statistique extends Model
 
         $ventes = Vente::whereBetween('date_vente', [$dateDeb, $dateFin])->where('archive', false)->get();
 
-        dd($ventes);
+        // dd($ventes);
     }
 
 }
