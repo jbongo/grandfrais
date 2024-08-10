@@ -19,6 +19,10 @@
             gap: 10px;
 
         }
+        body {
+
+            font-size: 15px!important;
+        }
     </style>
     <div class="content">
 
