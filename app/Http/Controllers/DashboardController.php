@@ -26,7 +26,8 @@ class DashboardController extends Controller
 
         $ca_n = $stat->chiffreAffaireMensuels($annee_n);
         $benefices_n = $stat->beneficeNetMensuels($annee_n);
-        // dd($benefices_n);
+        $depenses_n = $stat->depensesMensuelles($annee_n);
+        
 
         
         $caisse = Caisse::where('est_principale', true)->first();
@@ -44,9 +45,15 @@ class DashboardController extends Controller
 
         // benefice du mois
         $beneficeMois = $stat->beneficeNet($date.'-01', $date.'-31');
-        // dd($beneficeMois);
+     
+        // bénéfice du jour
+        $beneficeJour = $stat->beneficeNet(date('Y-m-d'), date('Y-m-d'));
 
+        // benefice de l'annee
+        $beneficeAnnee = $stat->beneficeNet(date('Y').'-01-01', date('Y').'-12-31');
+
+        // dd($ca_n);
        
-        return view('dashboard'); 
+        return view('dashboard', compact('ca_n', 'benefices_n', 'depenses_n',  'caJour', 'caMois', 'caAnnee', 'caisse', 'montantCaisse', 'beneficeMois', 'beneficeJour', 'beneficeAnnee', 'annee_n')); 
     }
 }

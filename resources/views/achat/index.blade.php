@@ -240,7 +240,7 @@
                                                 <label for="autres_charges" class="form-label">
                                                     Autres charges  <span class="text-danger">(livraison, transport, etc)</span>
                                                 </label>
-                                                <input type="number"  min="1" id="autres_charges" name="autres_charges" required value="{{ old('autres_charges') ? old('autres_charges') : '' }}" class="form-control">
+                                                <input type="number"  min="1" id="autres_charges" name="autres_charges"  value="{{ old('autres_charges') ? old('autres_charges') : '' }}" class="form-control">
     
                                                 @if ($errors->has('autres_charges'))
                                                     <br>
@@ -438,7 +438,7 @@
                                                 <label for="edit_autres_charges" class="form-label">
                                                     Autres charges <span class="text-danger">(livraison, transport, etc)</span>
                                                 </label>
-                                                <input type="number"  min="1"  id="edit_autres_charges" name="autres_charges" required value="{{ old('autres_charges') ? old('autres_charges') : '' }}" class="form-control">
+                                                <input type="number"  min="1"  id="edit_autres_charges" name="autres_charges"  value="{{ old('autres_charges') ? old('autres_charges') : '' }}" class="form-control">
     
                                                 @if ($errors->has('autres_charges'))
                                                     <br>

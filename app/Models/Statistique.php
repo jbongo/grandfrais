@@ -30,7 +30,8 @@ class Statistique extends Model
             $date_deb = $annee.'-'.$month.'-01';
             $date_fin = $annee.'-'.$month.'-31';
             
-            $ca[$i] = $this->chiffreAffaire($date_deb, $date_fin);
+            // $ca[$i] = $this->chiffreAffaire($date_deb, $date_fin);
+            $ca[] = $this->chiffreAffaire($date_deb, $date_fin);
 
         }
 
@@ -50,7 +51,8 @@ class Statistique extends Model
             $date_deb = $annee.'-'.$month.'-01';
             $date_fin = $annee.'-'.$month.'-31';
             
-            $benefices[$i] = $this->beneficeNet($date_deb, $date_fin);
+            // $benefices[$i] = $this->beneficeNet($date_deb, $date_fin);
+            $benefices[] = $this->beneficeNet($date_deb, $date_fin);
 
         }
 
@@ -70,7 +72,7 @@ class Statistique extends Model
             $date_deb = $annee.'-'.$month.'-01';
             $date_fin = $annee.'-'.$month.'-31';
             
-            $depenses[$i] = $this->depenses($date_deb, $date_fin);
+            $depenses[] = $this->montantDepenses($date_deb, $date_fin);
 
         }
 

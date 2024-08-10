@@ -115,16 +115,16 @@ final class IndexTable extends PowerGridComponent
        
            
             ->addColumn('prix_total', function(Achat $model) {
-                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_total,0,' ').'</span>';
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_total,0,'.',' ').'</span>';
             })
             ->addColumn('prix_unitaire', function(Achat $model) {
-                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,' ').'</span>';
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,'.',' ').'</span>';
             })
             ->addColumn('prix_unitaire', function(Achat $model) {
-                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,' ').'</span>';
+                return  '<span class="font-bold py-1 px-2 fs-6">'.number_format($model->prix_unitaire,0,'.',' ').'</span>';
             })
             ->addColumn('prix_unitaire_revient', function(Achat $model) {
-                return  '<span class="font-bold text-danger py-1 px-2 fs-5">'.number_format($model->autres_charges,0,' ').'</span>';
+                return  '<span class="font-bold text-danger py-1 px-2 fs-5">'.number_format($model->prix_unitaire_revient,0,'.',' ').'</span>';
             })
             ->addColumn('fournisseur', function (Achat $model) { 
 
