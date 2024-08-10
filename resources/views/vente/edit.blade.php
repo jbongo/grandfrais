@@ -141,28 +141,29 @@
 
                                                     </div>
 
-
-                                                    <div class="col-md-3 col-xl-2 ">
-                                                        <div class="mb-3 ">
-                                                            <label for="prix{{$key}}" class="form-label">
-                                                            Prix <span class="text-danger">*</span>
-                                                            </label>
-                                                            <input type="number" id="prix{{$key}}" name="prix{{$key}}" min="0" step="1" value="{{$prod->pivot?->prix_unitaire}}"
-                                                                class="form-control prix_ttc" required>                                
-                                                        </div>
-                                                    </div>
-
-
                                                     <div class="col-md-3 col-xl-2 ">
                                                         <div class="mb-3 ">
                                                             <label for="quantite{{$key}}" class="form-label">
                                                             <span class="libelle_quantite"></span> <span class="text-danger">*</span>
                                                             </label>
-                                                            <input type="number" id="quantite{{$key}}" name="quantite{{$key}}" min="0" step="0.01"  value="{{$prod->pivot?->quantite}}"                                 
-                                                                class="form-control" required>
+                                                            <input type="number" id="quantite{{$key}}"  name="quantite{{$key}}" min="0" step="0.01"  value="{{$prod->pivot?->quantite}}" 
+                                                                class="form-control quantite_nombre_kilo_produit" required>
                                                         
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-md-3 col-xl-2 ">
+                                                        <div class="mb-3 ">
+                                                            <label for="prix{{$key}}" class="form-label">
+                                                            Prix total<span class="text-danger">*</span>
+                                                            </label>
+                                                            <input type="number" id="prix{{$key}}" name="prix{{$key}}" min="0" step="1" value="{{$prod->pivot?->prix_total}}"
+                                                                class="form-control prix_ttc" required>                                
+                                                        </div>
+                                                    </div>
+
+
+                                                    
                                                     <input type="hidden" name="pivot_id{{$key}}" value="{{ $prod->pivot->id }}">
 
                                                     <div class="col-md-1 col-xl-1 mb-3 mt-3"> <label class="form-label" for="">&nbsp;</label> <a href="#" class="supprimer_produit btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></div></br>
@@ -303,12 +304,21 @@
                             </div>
 
                         </div>
-
+                        <div class="col-md-3 col-xl-2 ">
+                            <div class="mb-3 ">
+                                <label for="quantite${y}" class="form-label">
+                                <span class="libelle_quantite"></span> <span class="text-danger">*</span>
+                                </label>
+                                <input type="number" id="quantite${y}"  name="quantite${y}" min="0" step="0.01" value="" 
+                                    class="form-control quantite_nombre_kilo_produit" required>
+                               
+                            </div>
+                        </div>
 
                         <div class="col-md-3 col-xl-2 ">
                             <div class="mb-3 ">
                                 <label for="prix${y}" class="form-label">
-                                Prix <span class="text-danger">*</span>
+                                Prix total <span class="text-danger">*</span>
                                 </label>
                                 <input type="number" id="prix${y}" name="prix${y}" min="0" step="1" value=""
                                     class="form-control prix_ttc" required>                                
@@ -316,16 +326,7 @@
                         </div>
 
 
-                        <div class="col-md-3 col-xl-2 ">
-                            <div class="mb-3 ">
-                                <label for="quantite${y}" class="form-label">
-                                <span class="libelle_quantite"></span> <span class="text-danger">*</span>
-                                </label>
-                                <input type="number" id="quantite${y}" name="quantite${y}" min="0" step="0.01"  value=""                                 
-                                    class="form-control" required>
-                               
-                            </div>
-                        </div>
+                       
                         <input type="hidden" name="pivot_id${y}" value="">
 
                         <div class="col-md-1 col-xl-1 mb-3 mt-3"> <label class="form-label" for="">&nbsp;</label> <a href="#" class="supprimer_produit btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></div></br>
@@ -366,17 +367,33 @@
      
         //    Lorsqu'on change le produit
         
+        
         $(document).on('change', '.select_produit', function() { 
             var id = $(this).val();
-            var prix_ttc = tab_produits[id].prix_vente_ttc;
+            var prix_unitaire_ttc = tab_produits[id].prix_vente_ttc;
             
             var unite_mesure = tab_produits[id].unite_mesure_stock;
             var text = unite_mesure == "Kilo" ? "Nombre de kilos" : "Quantité";
             $(this).parent().parent().parent().find('.libelle_quantite').text(text );     
-            console.log(tab_produits);       
+            // console.log(tab_produits);       
       
-            console.log( $(this).parent().parent());
-            $(this).parent().parent().parent().find('.prix_ttc').val(prix_ttc);
+            // console.log( $(this).parent().parent());
+            var quantite = $(this).parent().parent().parent().find('.quantite_nombre_kilo_produit').val();
+
+            var total = prix_unitaire_ttc != null ? quantite * prix_unitaire_ttc : 0;
+            $(this).parent().parent().parent().find('.prix_ttc').val(total);
+          
+        });
+
+        // Lorsqu'on saisi la quantité du produit        
+        $(document).on('keyup', '.quantite_nombre_kilo_produit', function() { 
+            var id =  $(this).parent().parent().parent().find('.select_produit').val()
+            
+            var quantite = $(this).val();
+            var prix_unitaire_ttc = tab_produits[id]?.prix_vente_ttc;
+            var total = prix_unitaire_ttc != null ? quantite * prix_unitaire_ttc : 0;
+            $(this).parent().parent().parent().find('.prix_ttc').val(total);
+     
           
         });
         

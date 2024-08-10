@@ -35,7 +35,7 @@ class VenteController extends Controller
      */
     public function create()
     {
-        $produits = Produit::where('archive', false)->get();
+        $produits = Produit::where('archive', false)->orderBy('nom')->get();
         return view('vente.add', compact('produits'));
     }
 
@@ -66,22 +66,22 @@ class VenteController extends Controller
 
         foreach ($ligneVentes as $ligne) {
             
-            // 0 => produit_id, 1 => prix_unitaire, 2 => quantite
-
+            // 0 => produit_id, 1 => quantité, 2 => prix_unitaire
+ 
             $produit = Produit::find($ligne[0]);
-            $prix = $ligne[1];
-            $quantite = $ligne[2];
-            $prix_total = $prix * $quantite;
+            $quantite = $ligne[1];
+            $prix_total = $ligne[2];
+            $prix_unitaire = $prix_total / $quantite;
 
-            $prix_unitaire_modifie = $produit->prix_vente_ttc != $prix ? true : false;
+            $prix_unitaire_modifie = $produit->prix_vente_ttc != $prix_unitaire ? true : false;
 
             $prix_global += $prix_total;
             $description_prix_total = $prix_unitaire_modifie == false ? $prix_total. " €" : "<span style='color:red;'>" . $prix_total . " €</span>";
             $description .= $produit->nom . " : ". $description_prix_total . "  |  ";
 
-            $benefice = ($prix - $produit->prix_achat_ttc) * $quantite;
+            $benefice = ($prix_unitaire - $produit->prix_achat_ttc) * $quantite;
             $benefice_total += $benefice;
-            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'benefice' => $benefice]);
+            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix_unitaire, 'prix_total' => $prix_total, 'benefice' => $benefice]);
 
              // MAJ Stock
 
@@ -136,7 +136,7 @@ class VenteController extends Controller
     public function edit($vente_id)
     {
         $vente = Vente::where('id', Crypt::decrypt($vente_id))->first();
-        $produits = Produit::where('archive', false)->get();
+        $produits = Produit::where('archive', false)->orderBy('nom')->get();
         return view('vente.edit', compact('vente', 'produits'));
     }
 
@@ -180,20 +180,22 @@ class VenteController extends Controller
             }
 
 
-            $produit = Produit::find($ligne[0]);
-            $prix = $ligne[1];
-            $quantite = $ligne[2];
-            $prix_total = $prix * $quantite;
+             // 0 => produit_id, 1 => quantité, 2 => prix_unitaire
+ 
+             $produit = Produit::find($ligne[0]);
+             $quantite = $ligne[1];
+             $prix_total = $ligne[2];
+             $prix_unitaire = $prix_total / $quantite;
             
-            $prix_unitaire_modifie = $produit->prix_vente_ttc != $prix ? true : false;
+            $prix_unitaire_modifie = $produit->prix_vente_ttc != $prix_unitaire ? true : false;
 
             $prix_global += $prix_total;
             $description_prix_total = $prix_unitaire_modifie == false ? $prix_total. " €" : "<span style='color:red;'>" . $prix_total . " €</span>";
             $description .= $produit->nom . " : ". $description_prix_total . "  |  ";
 
-            $benefice = ($prix - $produit->prix_achat_ttc) * $quantite;
+            $benefice = ($prix_unitaire - $produit->prix_achat_ttc) * $quantite;
             $benefice_total += $benefice;
-            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix, 'prix_total' => $prix_total, 'prix_unitaire_modifie' => $prix_unitaire_modifie, 'benefice' => $benefice]);
+            $produit->ventes()->attach($vente->id, ['quantite' => $quantite, 'prix_unitaire' => $prix_unitaire, 'prix_total' => $prix_total, 'prix_unitaire_modifie' => $prix_unitaire_modifie, 'benefice' => $benefice]);
 
             $caisse = Caisse::where('est_principale', true)->first();
 

@@ -65,37 +65,8 @@ final class indexTable extends PowerGridComponent
     
         $user = Auth::user();
 
-        $produits = Produit::where('archive', false)->get();
-        // if ($user->is_admin) {
+        $produits = Produit::where('archive', false)->orderBy('nom')->get();
 
-
-        //     $produits = Produit::where([['archive', false],['type','simple']])->get();
-        //     // On réccupère tous les contacts de type individu
-                
-        //     // $produits = Produit::select('produits.*','categorieproduits.nom')
-        //     //     ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
-        //     //     ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
-        //     //     ->where([['produits.archive', false],['produits.type','simple']])
-        //     //     ->get();
-       
-
-        // } else {
-        
-        //     $produits = Produit::where([['archive', false],['type','simple'], ['user_id',$user->id]])->get();
-            
-        //     //   On réccupère uniquement les contacts de l'utilisateur connecté
-            
-        //     // $produits = Produit::select('produits.*','categorieproduits.nom')
-        //     //     ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
-        //     //     ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
-        //     //     ->where([['produits.archive', false],['produits.type','simple'],['produits.user_id',$user->id]])
-        //     //     // ->whereIn('categorieproduit_produit.categorie_id', $this->categories_id )
-        //     //     ->get();
-         
-                
-        // }
-    // dd($produits);
-       
         
         return $produits;
 
@@ -135,17 +106,7 @@ final class indexTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            // ->addColumn('id')
-            // ->addColumn('type', function (Produit $model) {
-            //     if($model->type == "simple"){
-            //         $color = "btn-secondary ";
-            //     }
-            //     else{
-            //         $color = "btn-light ";                
-            //     }
-            //     return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
-            // } )
-            // ->addColumn('nature')
+  
             
             ->addColumn('image', function (Produit $model) {
                 if($model->imageproduits != null && sizeof($model->imageproduits)>0 ){
@@ -174,9 +135,12 @@ final class indexTable extends PowerGridComponent
                 return $cats;
             } )
             ->addColumn('prix_vente_ttc',function (Produit $model){
-                
               
                 return $model->prix_vente_ttc;
+            })
+            ->addColumn('prix_achat_ttc',function (Produit $model){
+              
+                return $model->prix_achat_ttc;
             })
             ->addColumn('stock',function (Produit $model){
                 
@@ -216,6 +180,7 @@ final class indexTable extends PowerGridComponent
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Catégories', 'categorie')->sortable()->searchable(),
             Column::make('Prix de vente ', 'prix_vente_ttc')->sortable()->searchable(),
+            Column::make('Prix d\'achat ', 'prix_achat_ttc')->sortable()->searchable(),
             Column::make('Stock', 'stock')->sortable()->searchable(),
 
 
