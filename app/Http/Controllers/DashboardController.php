@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $ca_n = $stat->chiffreAffaireMensuels($annee_n);
         $benefices_n = $stat->beneficeNetMensuels($annee_n);
         $depenses_n = $stat->depensesMensuelles($annee_n);
-        
+        $achats_n = $stat->achatsMensuels($annee_n);
 
         
         $caisse = Caisse::where('est_principale', true)->first();
@@ -54,6 +54,6 @@ class DashboardController extends Controller
 
         // dd($ca_n);
        
-        return view('dashboard', compact('ca_n', 'benefices_n', 'depenses_n',  'caJour', 'caMois', 'caAnnee', 'caisse', 'montantCaisse', 'beneficeMois', 'beneficeJour', 'beneficeAnnee', 'annee_n')); 
+        return view('dashboard', compact('ca_n', 'benefices_n', 'depenses_n','achats_n', 'caJour', 'caMois', 'caAnnee', 'caisse', 'montantCaisse', 'beneficeMois', 'beneficeJour', 'beneficeAnnee', 'annee_n')); 
     }
 }

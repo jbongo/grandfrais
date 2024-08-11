@@ -223,11 +223,12 @@
 
 
   <script>
-    var colors = ["#1e1b4b", "#84cc16", "#e11d48"],
+    var colors = ["#1e1b4b", "#84cc16", "#e11d48", "#f97316"];
     dataColors = $("#basic-column").data("colors");
     var ca_n = {!! json_encode($ca_n) !!};
     var benefices_n = {!! json_encode($benefices_n) !!}; 
     var depenses_n = {!! json_encode($depenses_n) !!};
+    var achats_n = {!! json_encode($achats_n) !!};
 
 // dataColors && (colors = dataColors.split(","));
 var options = {
@@ -240,6 +241,7 @@ var options = {
             { name: "Chiffre d'affaires", data: ca_n },
             { name: "Bénéfices", data: benefices_n },
             { name: "Dépenses", data: depenses_n },
+            { name: "Achats marchandises", data: achats_n },
         ],
         xaxis: { categories: ["Jan", "Feb", "Mar", "Avr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] },
         legend: { offsetY: 7 },

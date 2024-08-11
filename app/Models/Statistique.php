@@ -59,6 +59,25 @@ class Statistique extends Model
         return $benefices;
     }
 
+    /**
+     * Retourne les achats mensuels
+     */
+    
+     public function achatsMensuels($annee) {
+
+        //  ######## Calcul CA Sur l'année ##########
+        for ($i=1; $i <= 12 ; $i++) {                
+                       
+            $month = $i < 10 ? "0$i" : $i;
+            $date_deb = $annee.'-'.$month.'-01';
+            $date_fin = $annee.'-'.$month.'-31';
+            
+            $achats[] = $this->montantAchats($date_deb, $date_fin);
+
+        }
+
+        return $achats;
+     }
     /*
     * Retourne les dépenses mensuelles
     */
