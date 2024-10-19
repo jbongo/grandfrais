@@ -112,7 +112,7 @@
                                     <div class="col-sm-4 col-xl-2 ">
                                         <div class="mb-3 ">
                                             <label for="date_fin" class="form-label">
-                                                Date de début
+                                                Date de fin
                                             </label>
                                             <input type="date" id="date_fin" name="date_fin"
                                                 value="{{ old('date_fin') ? old('date_fin') : date('Y-m-d') }}"
