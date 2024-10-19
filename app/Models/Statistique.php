@@ -99,14 +99,37 @@ class Statistique extends Model
     }
 
     /*
-    * Retourne le bénéfice net
+    * Retourne le bénéfice net de tous les produits
     */
-
     public function beneficeNet($dateDeb, $dateFin){
 
-       $benefice = Vente::whereBetween('date_vente', [$dateDeb, $dateFin])->where('archive', false)->sum('benefice');
+        // $benefice = Vente::whereBetween('date_vente', [$dateDeb, $dateFin])->where('archive', false)->sum('benefice');
 
-        return $benefice;
+        // réccuperer les ids des ventes sur la date de debut et de fin
+        $ventes = Vente::whereBetween('date_vente', [$dateDeb, $dateFin])->where('archive', false)->get();
+        $idsVentes = $ventes->pluck('id');
+
+        $produitGlace = Produit::where('nom', 'Glace')->first();    
+        $benefices = ProduitVente::whereIn('vente_id', $idsVentes)->where('produit_id','<>', $produitGlace->id)->sum('benefice');
+
+  
+        return $benefices;
+    }
+
+    /*
+    * Retourne le bénéfice net d'un produit
+    */
+    public function beneficeNetProduit( $dateDeb, $dateFin,$idProduit){
+
+        // réccuperer les ids des ventes sur la date de debut et de fin
+        $ventes = Vente::whereBetween('date_vente', [$dateDeb, $dateFin])->where('archive', false)->get();
+        $idsVentes = $ventes->pluck('id');
+
+       
+        $benefices = ProduitVente::whereIn('vente_id', $idsVentes)->where('produit_id', $idProduit)->sum('benefice');
+
+        return $benefices;
+      
     }
 
     /*

@@ -27,6 +27,8 @@ use App\Http\Controllers\VenteController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\TypedepenseController;
+use App\Http\Controllers\StatistiqueController;
+use App\Http\Controllers\BeneficeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,11 +61,10 @@ Route::get('/login/o365/callback', [Autho365Controller::class, 'redirect'])->nam
 // Dashboard
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('welcome')->middleware(['auth']);
+    Route::get('/dashboard', 'index')->name('dashboard')->middleware(['auth']);
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+
 
 // Paramètres
 Route::controller(ParametreController::class)->group(function () {
@@ -345,6 +346,12 @@ Route::controller(CaisseController::class)->group(function () {
     Route::post('/caisses/desarchiver/{caisseId}', 'unarchive')->name('caisse.unarchive')->middleware(['auth']);
 });
 
+// Bénéfices
+Route::controller(BeneficeController::class)->group(function () {
+    Route::get('/benefices', 'index')->name('benefices.index')->middleware(['auth']);
+    Route::post('/benefices', 'benefices')->name('benefices');
+
+});
 
 
 require __DIR__ . '/auth.php';

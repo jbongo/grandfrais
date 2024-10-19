@@ -2,7 +2,7 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
 
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_catalogue_produit  = $li_catalogue_achat = $li_depense = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_type_depense = '';
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_catalogue_produit  = $li_catalogue_achat = $li_depense = $li_benefice = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_type_depense = '';
     $li_simulations = $li_utilisateur_show = $li_contact_show  = $li_catalogue_show = $li_parametre_show = $li_depense = $li_vente = false;
 
     switch ($curent_url[1]) {
@@ -82,6 +82,10 @@
         case 'depenses':
             $li_depense = 'menuitem-active';
             break;
+        // Benefices
+        case 'benefices':
+            $li_benefice = 'menuitem-active';
+            break;
  
         // Ventes
         case 'ventes':
@@ -139,7 +143,17 @@
             </li>
         @endcan
 
-        {{-- @can('permission', 'afficher-caisse') --}}
+        {{-- @can('permission', 'afficher-benefice') --}}
+            <li class="side-nav-item {{ $li_benefice }}">
+                <a href="{{ route('benefices.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class=" uil-usd-square"></i>
+                    <span> Bénéfices </span>
+                </a>
+            </li>
+        {{-- @endcan --}}
+
+        @can('permission', 'afficher-caisse')
             <li class="side-nav-item {{ $li_depense }}">
                 <a href="{{ route('caisse.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                     class="side-nav-link">
@@ -147,7 +161,7 @@
                     <span> Caisse </span>
                 </a>
             </li>
-        {{-- @endcan --}}
+        @endcan
 
         @can('permission', 'afficher-utilisateur')
             <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
